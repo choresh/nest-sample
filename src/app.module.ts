@@ -10,6 +10,7 @@ import { ApolloDriver, ApolloDriverConfig } from '@nestjs/apollo';
 import {UsersResolver} from './users/users.resolver';
 import { UsersService } from './users/users.service';
 import { UsersModule } from './users/users.module';
+import { TasksModule } from './tasks/tasks.module';
 
 @Module({
   imports: [
@@ -31,7 +32,8 @@ import { UsersModule } from './users/users.module';
       autoSchemaFile: true,
       // typeDefs: [__dirname + './entities/*.entity.ts']
     }),
-    UsersModule
+    UsersModule,
+    TasksModule
   ],
   controllers: [AppController],
   providers:  [AppService],
