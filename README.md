@@ -65,7 +65,7 @@ $ npm run test:cov
 Run this command within the project root folder:
 
 ```bash
-$ npx nest g resource <your-resource-name>
+$ npx nest g resource
 ```
 The CLI will prompt you with a few questions, in order to create the desiared Entity, DTOs, Module, Resolver, Service, and Tests.
 
