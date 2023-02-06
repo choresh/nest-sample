@@ -13,6 +13,11 @@ Run this command within the project parent folder:
 ```bash
 $ nest new <your-project-name>
 ```
+Run this command within the project root folder:
+
+```bash
+$ npm init @eslint/config
+```
 
 ## Installation
 Run this command within the project root folder:
