@@ -12,19 +12,43 @@ This app demonstrate combination of the folowing technologies:
     ```bash
     $ nest new <your-project-name>
     ```
-2. At file 'tsconfig.json' file, at 'compilerOptions' object, set `"strictNullChecks": true`.
-3. Run this command within the project root folder:
-    ```bash
-    $ npm init @eslint/config
+2. At file 'tsconfig.json', at 'compilerOptions' object, set `"strictNullChecks": true`.
+3. At project root folder, add file '.eslintrc.json', with this content:
     ```
-4. At file '.eslintrc.json', at 'env' object, replace `"browser": true` with `"node": true`.
-5. At file '.eslintrc.json', at 'parserOptions' object, add entry `"project": ["tsconfig.json"]`.
-6. Run this command within the project root folder:
+    {
+        "env": {
+            "node": true,
+            "es2021": true
+        },
+        "extends": "standard-with-typescript",
+        "overrides": [
+        ],
+        "parserOptions": {
+            "ecmaVersion": "latest",
+            "sourceType": "module",
+            "project": ["tsconfig.json"]
+        },
+        "rules": {
+        }
+    }
+    ```
+4. In your VC Code IDE - install the [ESLint extention](https://marketplace.visualstudio.com/items?itemName=dbaeumer.vscode-eslint).
+5. Fix syntax errors accurding result of the linter.
+6. Another way to invoke the linter - run this command within the project root folder:
     ```bash
     $ npm run lint
     ```
-7. Fix syntax errors accurding result of the linter.
+3. At project root folder, add file '.gitignore', with this content:
+    ```
+    # Dependency directory
+    node_modules
 
+    # Ignore built ts files
+    dist/**/*
+
+    # Coverage reports
+    coverage
+    ```
 
 ## Installation
 Run this command within the project root folder:
@@ -53,8 +77,8 @@ $ npm run start:prod
 
 ## Using the app
 Open browser, and navigate to the folowing URLs:
-* Main page: http://localhost:3000
-* Graphql playground: http://localhost:3000/graphql
+* Main page: http://localhost:3000.
+* Graphql playground: http://localhost:3000/graphql.
 
 ## Test
 Run those commands within the project root folder:
