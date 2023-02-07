@@ -13,7 +13,7 @@ export class User {
   @Column()
     name: string
 
-  // @Field()
+  @Field(() => [Task])
   @OneToMany(type => Task, task => task.user)
     tasks: Task[]
 }

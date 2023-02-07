@@ -21,7 +21,7 @@ export class Task {
   @Column()
     userId: number
 
-  // @Field()
-  @ManyToOne(type => User, user => user.tasks)
+  @Field(() => User)
+  @ManyToOne(type => User, user => user.tasks, { onDelete: 'CASCADE', cascade: true })
     user: User
 }
