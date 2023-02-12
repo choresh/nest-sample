@@ -3,10 +3,8 @@ import { AppController } from './app.controller'
 import { AppService } from './app.service'
 import { GraphQLModule } from '@nestjs/graphql'
 import { TypeOrmModule } from '@nestjs/typeorm'
-// import { User_ } from './entities/user.entity';
-// import { Task_ } from './entities/task.entity';
 import { ApolloDriver, type ApolloDriverConfig } from '@nestjs/apollo'
-// import { join } from 'path';
+import { join } from 'path'
 // import { UsersResolver } from './users/users.resolver'
 // import { UsersService } from './users/users.service'
 import { UsersModule } from './users/users.module'
@@ -21,16 +19,12 @@ import { TasksModule } from './tasks/tasks.module'
       username: 'root',
       password: '',
       database: 'peech',
-      // entities: [User, Task],
-      entities: [__dirname + './entities/*.entity.ts'],
+      entities: [join(__dirname, '/**/entities/*.entity.*')],
       synchronize: true
     }),
-    // TypeOrmModule.forFeature([User, Task]),
     GraphQLModule.forRoot<ApolloDriverConfig>({
       driver: ApolloDriver,
-      // typePaths: ['dist/*/*/*.js']
       autoSchemaFile: true
-      // typeDefs: [__dirname + './entities/*.entity.ts']
     }),
     UsersModule,
     TasksModule
