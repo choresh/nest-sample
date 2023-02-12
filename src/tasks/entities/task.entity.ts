@@ -1,10 +1,10 @@
 import { ObjectType, Field, ID } from '@nestjs/graphql'
 import { User } from 'src/users/entities/user.entity'
-import { Entity, Column, PrimaryGeneratedColumn, ManyToOne } from 'typeorm'
+import { Entity, Column, PrimaryGeneratedColumn, ManyToOne, BaseEntity } from 'typeorm'
 
 @ObjectType()
 @Entity()
-export class Task {
+export class Task extends BaseEntity {
   @Field(() => ID, { description: 'Primary key' })
   @PrimaryGeneratedColumn()
     id: number

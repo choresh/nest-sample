@@ -2,6 +2,12 @@ import { InputType, Int, Field } from '@nestjs/graphql'
 
 @InputType()
 export class CreateTaskInput {
-  @Field(() => Int, { description: 'Example field (placeholder)' })
-    exampleField: number
+  @Field(() => String, { description: 'title of the task' })
+    title: string
+
+  @Field(() => String, { description: 'description of the task' })
+    description: string
+
+  @Field(() => Int, { description: 'id of user that own the task' })
+    userId: number
 }

@@ -6,30 +6,31 @@ import { UpdateTaskInput } from './dto/update-task.input'
 
 @Resolver(() => Task)
 export class TasksResolver {
-  constructor (private readonly tasksService: TasksService) {}
+  constructor (private readonly tasksService: TasksService) {
+  }
 
   @Mutation(() => Task)
-  createTask (@Args('createTaskInput') createTaskInput: CreateTaskInput): string {
-    return this.tasksService.create(createTaskInput)
+  async createTask (@Args('createTaskInput') createTaskInput: CreateTaskInput): Promise<Task> {
+    return await this.tasksService.create(createTaskInput)
   }
 
   @Query(() => [Task], { name: 'tasks' })
-  findAll (): string {
-    return this.tasksService.findAll()
+  async findAll (): Promise<Task[]> {
+    return await this.tasksService.findAll()
   }
 
   @Query(() => Task, { name: 'task' })
-  findOne (@Args('id', { type: () => Int }) id: number): string {
-    return this.tasksService.findOne(id)
+  async findOne (@Args('id', { type: () => Int }) id: number): Promise<Task | null> {
+    return await this.tasksService.findOne(id)
   }
 
   @Mutation(() => Task)
-  updateTask (@Args('updateTaskInput') updateTaskInput: UpdateTaskInput): string {
-    return this.tasksService.update(updateTaskInput.id, updateTaskInput)
+  async updateTask (@Args('updateTaskInput') updateTaskInput: UpdateTaskInput): Promise<Task> {
+    return await this.tasksService.update(updateTaskInput.id, updateTaskInput)
   }
 
   @Mutation(() => Task)
-  removeTask (@Args('id', { type: () => Int }) id: number): string {
-    return this.tasksService.remove(id)
+  async removeTask (@Args('id', { type: () => Int }) id: number): Promise<void> {
+    await this.tasksService.remove(id)
   }
 }

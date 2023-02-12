@@ -1,26 +1,38 @@
-import { Injectable } from '@nestjs/common'
+import { Injectable, NotFoundException } from '@nestjs/common'
 import { type CreateUserInput } from './dto/create-user.input'
 import { type UpdateUserInput } from './dto/update-user.input'
+import { Repository } from 'typeorm'
+import { User } from './entities/user.entity'
+import { InjectRepository } from '@nestjs/typeorm'
 
 @Injectable()
 export class UsersService {
-  create (createUserInput: CreateUserInput): string {
-    return 'This action adds a new user'
+  constructor (@InjectRepository(User) private readonly repository: Repository<User>) {
   }
 
-  findAll (): string {
-    return 'This action returns all users'
+  async create (input: CreateUserInput): Promise<User> {
+    return await this.repository.save(input)
   }
 
-  findOne (id: number): string {
-    return `This action returns a #${id} user`
+  async findAll (): Promise<User[]> {
+    return await this.repository.find()
   }
 
-  update (id: number, updateUserInput: UpdateUserInput): string {
-    return `This action updates a #${id} user`
+  async findOne (id: number): Promise<User | null> {
+    return await this.repository.findOne({ where: { id } })
   }
 
-  remove (id: number): string {
-    return `This action removes a #${id} user`
+  async update (id: number, input: UpdateUserInput): Promise<User> {
+    const edited = await this.repository.findOne({ where: { id } })
+    if (edited === null) {
+      throw new NotFoundException('User not found')
+    }
+    edited.name = (input.name ?? '')
+    await edited.save()
+    return edited
+  }
+
+  async remove (id: number): Promise<void> {
+    await this.repository.delete(id)
   }
 }

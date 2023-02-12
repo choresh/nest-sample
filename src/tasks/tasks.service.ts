@@ -1,26 +1,39 @@
-import { Injectable } from '@nestjs/common'
+import { Injectable, NotFoundException } from '@nestjs/common'
+import { InjectRepository } from '@nestjs/typeorm'
+import { Repository } from 'typeorm'
 import { type CreateTaskInput } from './dto/create-task.input'
 import { type UpdateTaskInput } from './dto/update-task.input'
+import { Task } from './entities/task.entity'
 
 @Injectable()
 export class TasksService {
-  create (createTaskInput: CreateTaskInput): string {
-    return 'This action adds a new task'
+  constructor (@InjectRepository(Task) private readonly repository: Repository<Task>) {
   }
 
-  findAll (): string {
-    return 'This action returns all tasks'
+  async create (input: CreateTaskInput): Promise<Task> {
+    return await this.repository.save(input)
   }
 
-  findOne (id: number): string {
-    return `This action returns a #${id} task`
+  async findAll (): Promise<Task[]> {
+    return await this.repository.find()
   }
 
-  update (id: number, updateTaskInput: UpdateTaskInput): string {
-    return `This action updates a #${id} task`
+  async findOne (id: number): Promise<Task | null> {
+    return await this.repository.findOne({ where: { id } })
   }
 
-  remove (id: number): string {
-    return `This action removes a #${id} task`
+  async update (id: number, input: UpdateTaskInput): Promise<Task> {
+    const edited = await this.repository.findOne({ where: { id } })
+    if (edited === null) {
+      throw new NotFoundException('Task not found')
+    }
+    edited.title = (input.title ?? '')
+    edited.description = (input.description ?? '')
+    await edited.save()
+    return edited
+  }
+
+  async remove (id: number): Promise<void> {
+    await this.repository.delete(id)
   }
 }
