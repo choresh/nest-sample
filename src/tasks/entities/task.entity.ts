@@ -9,11 +9,11 @@ export class Task extends BaseEntity {
   @PrimaryGeneratedColumn()
     id: number
 
-  @Field()
+  // @Field()
   @Column()
     title: string
 
-  @Field()
+  // @Field()
   @Column()
     description: string
 
@@ -21,7 +21,7 @@ export class Task extends BaseEntity {
   @Column()
     userId: number
 
-  @Field(() => User)
+  // @Field(() => User)
   @ManyToOne(type => User, user => user.tasks, { onDelete: 'CASCADE', cascade: true })
     user: User
 }

@@ -10,7 +10,7 @@ export class User extends BaseEntity {
   @PrimaryGeneratedColumn()
     id: number
 
-  @Field()
+  // @Field()
   @Column()
   /*
   @Column({ length: 150 })
@@ -20,7 +20,7 @@ export class User extends BaseEntity {
   */
     name: string
 
-  @Field(() => [Task])
-  @OneToMany(type => Task, task => task.user)
+  // @Field(() => [Task])
+  @OneToMany(type => Task, task => task.user, { eager: true })
     tasks: Task[]
 }
