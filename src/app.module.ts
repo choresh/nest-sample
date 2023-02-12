@@ -19,8 +19,9 @@ import { TasksModule } from './tasks/tasks.module'
       username: 'root',
       password: '',
       database: 'peech',
-      entities: [join(__dirname, '/**/entities/*.entity.*')],
-      synchronize: true
+      entities: [join(__dirname, '/**/entities/*.entity.js')], // Fetch the entities clases from relevant files under 'dist' folder.
+      // dropSchema: true, // (TODO: Not for pruduction!!!)
+      synchronize: true // (TODO: Not for pruduction!!!)
     }),
     GraphQLModule.forRoot<ApolloDriverConfig>({
       driver: ApolloDriver,
