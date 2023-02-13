@@ -100,6 +100,11 @@ $ npx nest g resource
 ```
 The CLI will prompt you with a few questions, in order to create the desiared Entity, DTOs, Module, Resolver, Service, and Tests.
 
+Add this line within `@Module({})` of the reource:
+```
+imports: [TypeOrmModule.forFeature([<type of the resource entity class>])],
+```
+
 ## Nest docs, code and samples
 * [docs](https://docs.nestjs.com).
 * [code and samples](https://github.com/nestjs/nest).

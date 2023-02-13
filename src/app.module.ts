@@ -9,6 +9,7 @@ import { join } from 'path'
 // import { UsersService } from './users/users.service'
 import { UsersModule } from './users/users.module'
 import { TasksModule } from './tasks/tasks.module'
+import { TenantsModule } from './tenants/tenants.module';
 
 @Module({
   imports: [
@@ -19,8 +20,8 @@ import { TasksModule } from './tasks/tasks.module'
       username: 'root',
       password: '',
       database: 'peech',
-      entities: [join(__dirname, '/**/entities/*.entity.js')], // Fetch the entities clases from relevant files under 'dist' folder.
-      // dropSchema: true, // (TODO: Not for pruduction!!!)
+      entities: [join(__dirname, '/**/entities/*.entity.js')], // Fetch all entities metadata (clases) from relevant files under 'dist' folder.
+      dropSchema: true, // (TODO: Not for pruduction!!!)
       synchronize: true // (TODO: Not for pruduction!!!)
     }),
     GraphQLModule.forRoot<ApolloDriverConfig>({
@@ -28,7 +29,8 @@ import { TasksModule } from './tasks/tasks.module'
       autoSchemaFile: true
     }),
     UsersModule,
-    TasksModule
+    TasksModule,
+    TenantsModule
   ],
   controllers: [AppController],
   providers: [AppService]
