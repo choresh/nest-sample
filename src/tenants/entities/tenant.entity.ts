@@ -1,16 +1,14 @@
-import { ObjectType, Field, ID } from '@nestjs/graphql'
+import { ObjectType } from '@nestjs/graphql'
 import { User } from 'src/users/entities/user.entity'
-import { BaseEntity, Entity, Column, PrimaryGeneratedColumn, OneToMany } from 'typeorm'
+import { BaseEntity, Entity, Column, ObjectIdColumn, OneToMany } from 'typeorm'
 // import { IsString, Max, MaxLength, Min, MinLength } from 'class-validator';
 
 @ObjectType()
 @Entity()
 export class Tenant extends BaseEntity {
-  @Field(() => ID, { description: 'Primary key' })
-  @PrimaryGeneratedColumn()
-    id: number
+  @ObjectIdColumn()
+    _id: string
 
-  // @Field()
   @Column()
   /*
   @Column({ length: 150 })
@@ -20,7 +18,6 @@ export class Tenant extends BaseEntity {
   */
     name: string
 
-  // @Field(() => [Task])
   @OneToMany(type => User, user => user.tenant, { eager: true })
     users: User[]
 }

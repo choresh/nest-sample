@@ -18,12 +18,12 @@ export class TasksService {
     return await this.repository.find()
   }
 
-  async findOne (id: number): Promise<Task | null> {
-    return await this.repository.findOne({ where: { id } })
+  async findOne (id: string): Promise<Task | null> {
+    return await this.repository.findOne({ where: { _id: id } })
   }
 
-  async update (id: number, input: UpdateTaskInput): Promise<Task> {
-    const edited = await this.repository.findOne({ where: { id } })
+  async update (id: string, input: UpdateTaskInput): Promise<Task> {
+    const edited = await this.repository.findOne({ where: { _id: id } })
     if (edited === null) {
       throw new NotFoundException('Task not found')
     }
@@ -33,7 +33,7 @@ export class TasksService {
     return edited
   }
 
-  async remove (id: number): Promise<void> {
+  async remove (id: string): Promise<void> {
     await this.repository.delete(id)
   }
 }

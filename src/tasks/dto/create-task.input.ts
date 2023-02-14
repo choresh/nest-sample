@@ -1,13 +1,8 @@
-import { InputType, Int, Field } from '@nestjs/graphql'
+import { InputType } from '@nestjs/graphql'
 
 @InputType()
 export class CreateTaskInput {
-  @Field(() => String, { description: 'title of the task' })
-    title: string
-
-  @Field(() => String, { description: 'description of the task' })
-    description: string
-
-  @Field(() => Int, { description: 'id of user that own the task' })
-    userId: number
+  title: string
+  description: string
+  userId: string
 }

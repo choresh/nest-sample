@@ -1,4 +1,4 @@
-import { Resolver, Query, Mutation, Args, Int } from '@nestjs/graphql'
+import { Resolver, Query, Mutation, Args } from '@nestjs/graphql'
 import { TasksService } from './tasks.service'
 import { Task } from './entities/task.entity'
 import { CreateTaskInput } from './dto/create-task.input'
@@ -20,7 +20,7 @@ export class TasksResolver {
   }
 
   @Query(() => Task, { name: 'task' })
-  async findOne (@Args('id', { type: () => Int }) id: number): Promise<Task | null> {
+  async findOne (@Args('id', { type: () => String }) id: string): Promise<Task | null> {
     return await this.tasksService.findOne(id)
   }
 
@@ -30,7 +30,7 @@ export class TasksResolver {
   }
 
   @Mutation(() => Task)
-  async removeTask (@Args('id', { type: () => Int }) id: number): Promise<void> {
+  async removeTask (@Args('id', { type: () => String }) id: string): Promise<void> {
     await this.tasksService.remove(id)
   }
 }

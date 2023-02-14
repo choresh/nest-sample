@@ -1,4 +1,4 @@
-import { Resolver, Query, Mutation, Args, Int } from '@nestjs/graphql'
+import { Resolver, Query, Mutation, Args } from '@nestjs/graphql'
 import { TenantsService } from './tenants.service'
 import { Tenant } from './entities/tenant.entity'
 import { CreateTenantInput } from './dto/create-tenant.input'
@@ -20,7 +20,7 @@ export class TenantsResolver {
   }
 
   @Query(() => Tenant, { name: 'tenant' })
-  async findOne (@Args('id', { type: () => Int }) id: number): Promise<Tenant | null> {
+  async findOne (@Args('id', { type: () => String }) id: string): Promise<Tenant | null> {
     return await this.tenantsService.findOne(id)
   }
 
@@ -30,7 +30,7 @@ export class TenantsResolver {
   }
 
   @Mutation(() => Tenant)
-  async removeTenant (@Args('id', { type: () => Int }) id: number): Promise<void> {
+  async removeTenant (@Args('id', { type: () => String }) id: string): Promise<void> {
     await this.tenantsService.remove(id)
   }
 }
