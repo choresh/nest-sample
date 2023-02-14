@@ -19,9 +19,9 @@ import { TenantsModule } from './tenants/tenants.module'
       // username: 'root',
       // password: '',
       // database: 'peech',
-      entities: [join(__dirname, '/**/entities/*.entity.js')] // Fetch all entities metadata (classes) from relevant files under 'dist' folder.
       // dropSchema: true, // (TODO: Not for pruduction!!!)
-      // synchronize: true // (TODO: Not for pruduction!!!)
+      // synchronize: true, // (TODO: Not for pruduction!!!)
+      entities: [join(__dirname, '/**/entities/*.entity.js')] // Fetch all entities metadata (classes) from relevant files under 'dist' folder.
     }),
     GraphQLModule.forRoot<ApolloDriverConfig>({
       driver: ApolloDriver,

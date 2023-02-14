@@ -19,11 +19,11 @@ export class UsersService {
   }
 
   async findOne (id: string): Promise<User | null> {
-    return await this.repository.findOne({ where: { _id: id } })
+    return await this.repository.findOne({ where: { id } })
   }
 
   async update (id: string, input: UpdateUserInput): Promise<User> {
-    const edited = await this.repository.findOne({ where: { _id: id } })
+    const edited = await this.repository.findOne({ where: { id } })
     if (edited === null) {
       throw new NotFoundException('User not found')
     }

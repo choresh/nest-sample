@@ -6,7 +6,7 @@ import { Entity, Column, ObjectIdColumn, ManyToOne, BaseEntity } from 'typeorm'
 @Entity()
 export class Task extends BaseEntity {
   @ObjectIdColumn()
-    _id: string
+    id: string
 
   @Column()
     title: string
@@ -17,6 +17,6 @@ export class Task extends BaseEntity {
   @Column()
     userId: string
 
-  @ManyToOne(type => User, user => user.tasks, { onDelete: 'CASCADE', cascade: true })
+  @ManyToOne(type => User, user => user.tasks)
     user: User
 }

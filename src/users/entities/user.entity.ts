@@ -8,7 +8,7 @@ import { BaseEntity, Entity, Column, ObjectIdColumn, OneToMany, ManyToOne } from
 @Entity()
 export class User extends BaseEntity {
   @ObjectIdColumn()
-    _id: string
+    id: string
 
   @Column()
   /*
@@ -19,12 +19,12 @@ export class User extends BaseEntity {
   */
     name: string
 
-  @OneToMany(type => Task, task => task.user, { eager: true })
+  @OneToMany(type => Task, task => task.user, { cascade: true })
     tasks: Task[]
 
   @Column()
     tenantId: string
 
-  @ManyToOne(type => Tenant, tenant => tenant.users, { onDelete: 'CASCADE', cascade: true })
+  @ManyToOne(type => Tenant, tenant => tenant.users)
     tenant: Tenant
 }

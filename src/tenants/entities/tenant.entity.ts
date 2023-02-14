@@ -7,7 +7,7 @@ import { BaseEntity, Entity, Column, ObjectIdColumn, OneToMany } from 'typeorm'
 @Entity()
 export class Tenant extends BaseEntity {
   @ObjectIdColumn()
-    _id: string
+    id: string
 
   @Column()
   /*
@@ -18,6 +18,6 @@ export class Tenant extends BaseEntity {
   */
     name: string
 
-  @OneToMany(type => User, user => user.tenant, { eager: true })
+  @OneToMany(type => User, user => user.tenant, { cascade: true })
     users: User[]
 }
