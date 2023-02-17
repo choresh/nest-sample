@@ -1,23 +1,18 @@
-import { ObjectType } from '@nestjs/graphql'
-import { User } from 'src/users/entities/user.entity'
-import { BaseEntity, Entity, Column, ObjectIdColumn, OneToMany } from 'typeorm'
-// import { IsString, Max, MaxLength, Min, MinLength } from 'class-validator';
+import { Field, ID, ObjectType } from '@nestjs/graphql'
+import { type User } from 'src/users/entities/user.entity'
+import { Prop, Schema } from '@nestjs/mongoose'
+import * as mongoose from 'mongoose'
+import { ObjectId } from 'mongoose'
 
 @ObjectType()
-@Entity()
-export class Tenant extends BaseEntity {
-  @ObjectIdColumn()
-    id: string
+@Schema()
+export class Tenant {
+  @Field(() => ID)
+    _id: ObjectId
 
-  @Column()
-  /*
-  @Column({ length: 150 })
-  @MinLength(1)
-  @MaxLength(150)
-  @IsString()
-  */
+  @Prop()
     name: string
 
-  @OneToMany(type => User, user => user.tenant, { cascade: true })
+  @Prop({ type: [{ type: mongoose.Schema.Types.ObjectId, ref: 'User' }] })
     users: User[]
 }

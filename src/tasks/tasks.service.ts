@@ -1,39 +1,40 @@
 import { Injectable, NotFoundException } from '@nestjs/common'
-import { InjectRepository } from '@nestjs/typeorm'
-import { Repository } from 'typeorm'
+import { InjectModel } from '@nestjs/mongoose'
+import { Model, type HydratedDocument } from 'mongoose'
 import { type CreateTaskInput } from './dto/create-task.input'
 import { type UpdateTaskInput } from './dto/update-task.input'
 import { Task } from './entities/task.entity'
 
 @Injectable()
 export class TasksService {
-  constructor (@InjectRepository(Task) private readonly repository: Repository<Task>) {
+  constructor (@InjectModel(Task.name) private readonly _model: Model<HydratedDocument<Task>>) {
   }
 
   async create (input: CreateTaskInput): Promise<Task> {
-    return await this.repository.save(input)
+    const obj = new this._model(input)
+    return await obj.save()
   }
 
   async findAll (): Promise<Task[]> {
-    return await this.repository.find()
+    return await this._model.find().populate('user').exec()
   }
 
   async findOne (id: string): Promise<Task | null> {
-    return await this.repository.findOne({ where: { id } })
+    return await this._model.findById(id).populate('user').exec()
   }
 
   async update (id: string, input: UpdateTaskInput): Promise<Task> {
-    const edited = await this.repository.findOne({ where: { id } })
-    if (edited === null) {
+    const obj = await this._model.findById(id)
+    if (obj === null) {
       throw new NotFoundException('Task not found')
     }
-    edited.title = (input.title ?? '')
-    edited.description = (input.description ?? '')
-    await edited.save()
-    return edited
+    obj.title = (input.title ?? '')
+    obj.description = (input.description ?? '')
+    await obj.save()
+    return obj
   }
 
   async remove (id: string): Promise<void> {
-    await this.repository.delete(id)
+    await this._model.remove(id)
   }
 }

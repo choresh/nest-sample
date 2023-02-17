@@ -1,22 +1,24 @@
-import { ObjectType } from '@nestjs/graphql'
+import { Field, ID, ObjectType } from '@nestjs/graphql'
 import { User } from 'src/users/entities/user.entity'
-import { Entity, Column, ObjectIdColumn, ManyToOne, BaseEntity } from 'typeorm'
+import { Prop, Schema } from '@nestjs/mongoose'
+import * as mongoose from 'mongoose'
+import { ObjectId } from 'mongoose'
 
 @ObjectType()
-@Entity()
-export class Task extends BaseEntity {
-  @ObjectIdColumn()
-    id: string
+@Schema()
+export class Task {
+  @Field(() => ID)
+    _id: ObjectId
 
-  @Column()
+  @Prop()
     title: string
 
-  @Column()
+  @Prop()
     description: string
 
-  @Column()
+  @Prop()
     userId: string
 
-  @ManyToOne(type => User, user => user.tasks)
+  @Prop({ type: mongoose.Schema.Types.ObjectId, ref: 'User' })
     user: User
 }
