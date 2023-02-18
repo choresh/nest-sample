@@ -1,9 +1,8 @@
 import { Field, ID, ObjectType } from '@nestjs/graphql'
-import { type Task } from 'src/tasks/entities/task.entity'
+import { Task } from 'src/tasks/entities/task.entity'
 // import { Tenant } from 'src/tenants/entities/tenant.entity'
 import { Prop, Schema } from '@nestjs/mongoose'
-import * as mongoose from 'mongoose'
-import { ObjectId } from 'mongoose'
+import { ObjectId, Schema as MongooseSchema } from 'mongoose'
 
 @ObjectType()
 @Schema()
@@ -14,7 +13,7 @@ export class User {
   @Prop()
     name: string
 
-  @Prop({ type: [{ type: mongoose.Schema.Types.ObjectId, ref: 'Task' }] })
+  @Prop({ type: [{ type: MongooseSchema.Types.ObjectId, ref: Task.name }] })
     tasks: Task[]
 
   @Prop()
