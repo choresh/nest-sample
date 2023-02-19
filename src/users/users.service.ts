@@ -7,9 +7,8 @@ import { User } from './entities/user.entity'
 
 @Injectable()
 export class UsersService {
-  constructor (
-    @InjectModel(User) private readonly _model: ReturnModelType<typeof User>
-  ) {}
+  constructor (@InjectModel(User) private readonly _model: ReturnModelType<typeof User>) {
+  }
 
   async create (input: CreateUserInput): Promise<User> {
     const obj = new this._model(input)

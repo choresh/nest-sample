@@ -7,9 +7,8 @@ import { Task } from './entities/task.entity'
 
 @Injectable()
 export class TasksService {
-  constructor (
-    @InjectModel(Task) private readonly _model: ReturnModelType<typeof Task>
-  ) {}
+  constructor (@InjectModel(Task) private readonly _model: ReturnModelType<typeof Task>) {
+  }
 
   async create (input: CreateTaskInput): Promise<Task> {
     const obj = new this._model(input)
