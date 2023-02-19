@@ -2,12 +2,12 @@
 
 ## Description
 This app demonstrate combination of the folowing technologies:
-* Type-script.
-* Nest-js.
-* Type-orm.
-* Graph-ql.
+* Type script.
+* Nestjs.
+* Graphql.
+* Mongodb.
 
-## Creating app base line
+## How to scaffold a new project
 1. Run this command within the project parent folder:
     ```bash
     $ nest new <your-project-name>
