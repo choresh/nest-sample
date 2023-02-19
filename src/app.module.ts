@@ -2,19 +2,16 @@ import { Module } from '@nestjs/common'
 import { AppController } from './app.controller'
 import { AppService } from './app.service'
 import { GraphQLModule } from '@nestjs/graphql'
-import { MongooseModule } from '@nestjs/mongoose'
 import { ApolloDriver, type ApolloDriverConfig } from '@nestjs/apollo'
 import { UsersModule } from './users/users.module'
 import { TasksModule } from './tasks/tasks.module'
 import { TenantsModule } from './tenants/tenants.module'
+import { TypegooseModule } from 'nestjs-typegoose'
 
 @Module({
   imports: [
-    MongooseModule.forRoot(
-      'mongodb://localhost',
-      {
-        autoCreate: true
-      }
+    TypegooseModule.forRoot(
+      'mongodb://localhost'
     ),
     GraphQLModule.forRoot<ApolloDriverConfig>({
       driver: ApolloDriver,

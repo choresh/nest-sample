@@ -1,14 +1,15 @@
 import { Injectable, NotFoundException } from '@nestjs/common'
-import { InjectModel } from '@nestjs/mongoose'
-import { Model, type HydratedDocument } from 'mongoose'
+import { ReturnModelType } from '@typegoose/typegoose'
+import { InjectModel } from 'nestjs-typegoose'
 import { type CreateUserInput } from './dto/create-user.input'
 import { type UpdateUserInput } from './dto/update-user.input'
 import { User } from './entities/user.entity'
 
 @Injectable()
 export class UsersService {
-  constructor (@InjectModel(User.name) private readonly _model: Model<HydratedDocument<User>>) {
-  }
+  constructor (
+    @InjectModel(User) private readonly _model: ReturnModelType<typeof User>
+  ) {}
 
   async create (input: CreateUserInput): Promise<User> {
     const obj = new this._model(input)
@@ -20,7 +21,7 @@ export class UsersService {
   }
 
   async findOne (id: string): Promise<User | null> {
-    return await this._model.findById(id).populate('tasks').exec()
+    return await this._model.findById(id).populate('tasks')
   }
 
   async update (id: string, input: UpdateUserInput): Promise<User> {

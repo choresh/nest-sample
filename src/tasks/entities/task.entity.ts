@@ -1,19 +1,17 @@
 import { Field, ID, ObjectType } from '@nestjs/graphql'
-import { Prop, Schema } from '@nestjs/mongoose'
-import { ObjectId, Schema as MongooseSchema } from 'mongoose'
+import { mongoose, prop } from '@typegoose/typegoose'
 
 @ObjectType()
-@Schema()
 export class Task {
   @Field(() => ID)
-    _id: ObjectId
+  readonly _id: mongoose.Types.ObjectId
 
-  @Prop()
+  @prop()
     title: string
 
-  @Prop()
+  @prop()
     description: string
 
-  @Prop({ type: MongooseSchema.Types.ObjectId, ref: 'User', required: true })
+  @prop({ required: true })
     userId: string
 }

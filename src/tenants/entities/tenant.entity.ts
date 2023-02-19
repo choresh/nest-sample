@@ -1,18 +1,21 @@
 import { Field, ID, ObjectType } from '@nestjs/graphql'
-import { type User } from 'src/users/entities/user.entity'
-import { Prop, Schema } from '@nestjs/mongoose'
-import * as mongoose from 'mongoose'
-import { ObjectId } from 'mongoose'
+import { User } from 'src/users/entities/user.entity'
+import { mongoose, prop, type Ref } from '@typegoose/typegoose'
 
 @ObjectType()
-@Schema()
 export class Tenant {
   @Field(() => ID)
-    _id: ObjectId
+  readonly _id: mongoose.Types.ObjectId
 
-  @Prop()
+  @prop()
     name: string
 
-  @Prop({ type: [{ type: mongoose.Schema.Types.ObjectId, ref: 'User' }] })
-    users: User[]
+  @Field((type) => [User], { nullable: true })
+  @prop({
+    ref: () => User,
+    foreignField: 'tenantId',
+    localField: '_id'
+  })
+    // eslint-disable-next-line @typescript-eslint/array-type
+    users: Ref<User>[]
 }

@@ -1,26 +1,24 @@
 import { Field, ID, ObjectType } from '@nestjs/graphql'
+import { mongoose, prop, type Ref } from '@typegoose/typegoose'
 import { Task } from 'src/tasks/entities/task.entity'
-// import { Tenant } from 'src/tenants/entities/tenant.entity'
-import { Prop, Schema } from '@nestjs/mongoose'
-import { ObjectId, Schema as MongooseSchema } from 'mongoose'
 
 @ObjectType()
-@Schema()
 export class User {
   @Field(() => ID)
-    _id: ObjectId
+  readonly _id: mongoose.Types.ObjectId
 
-  @Prop()
+  @prop()
     name: string
 
-  @Prop({ type: [{ type: MongooseSchema.Types.ObjectId, ref: Task.name }] })
-    tasks: Task[]
+  @Field((type) => [Task], { nullable: true })
+  @prop({
+    ref: () => Task,
+    foreignField: 'userId',
+    localField: '_id'
+  })
+    // eslint-disable-next-line @typescript-eslint/array-type
+    tasks: Ref<Task>[]
 
-  @Prop()
+  @prop({ required: true })
     tenantId: string
-
-  /*
-  @Prop({ type: mongoose.Schema.Types.ObjectId, ref: 'Tenant' })
-    tenant: Tenant
-  */
 }
