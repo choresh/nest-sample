@@ -16,14 +16,11 @@ export class TenantsService {
   }
 
   async findAll (): Promise<Tenant[]> {
-    return await this._model
-      .find()
-      .exec()
+    return await this._model.find().exec()
   }
 
   async findOne (id: string): Promise<Tenant | null> {
-    return await this._model
-      .findById(id)
+    return await this._model.findById(id)
   }
 
   async update (id: string, input: UpdateTenantInput): Promise<Tenant> {
