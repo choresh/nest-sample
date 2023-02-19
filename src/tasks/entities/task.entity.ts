@@ -1,6 +1,8 @@
 import { Field, ID, ObjectType } from '@nestjs/graphql'
-import { mongoose, prop } from '@typegoose/typegoose'
+import { mongoose, plugin, prop } from '@typegoose/typegoose'
+import * as autopopulate from 'mongoose-autopopulate'
 
+@plugin(autopopulate as any)
 @ObjectType()
 export class Task {
   @Field(() => ID)

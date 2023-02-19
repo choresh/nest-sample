@@ -1,10 +1,12 @@
 import { Injectable, NotFoundException } from '@nestjs/common'
-import { ReturnModelType } from '@typegoose/typegoose'
+import { plugin, ReturnModelType } from '@typegoose/typegoose'
 import { InjectModel } from 'nestjs-typegoose'
 import { type CreateUserInput } from './dto/create-user.input'
 import { type UpdateUserInput } from './dto/update-user.input'
 import { User } from './entities/user.entity'
+import * as autopopulate from 'mongoose-autopopulate'
 
+@plugin(autopopulate as any)
 @Injectable()
 export class UsersService {
   constructor (@InjectModel(User) private readonly _model: ReturnModelType<typeof User>) {
@@ -16,11 +18,11 @@ export class UsersService {
   }
 
   async findAll (): Promise<User[]> {
-    return await this._model.find().populate('tasks').exec()
+    return await this._model.find().exec()
   }
 
   async findOne (id: string): Promise<User | null> {
-    return await this._model.findById(id).populate('tasks')
+    return await this._model.findById(id)
   }
 
   async update (id: string, input: UpdateUserInput): Promise<User> {
