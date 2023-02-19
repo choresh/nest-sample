@@ -16,11 +16,26 @@ export class TenantsService {
   }
 
   async findAll (): Promise<Tenant[]> {
-    return await this._model.find().populate('users').exec()
+    return await this._model
+      .find()
+      .populate({
+        path: 'users',
+        populate: {
+          path: 'tasks'
+        }
+      })
+      .exec()
   }
 
   async findOne (id: string): Promise<Tenant | null> {
-    return await this._model.findById(id).populate('users')
+    return await this._model
+      .findById(id)
+      .populate({
+        path: 'users',
+        populate: {
+          path: 'tasks'
+        }
+      })
   }
 
   async update (id: string, input: UpdateTenantInput): Promise<Tenant> {
