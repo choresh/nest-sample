@@ -1,6 +1,6 @@
 import { Field, ID, ObjectType } from '@nestjs/graphql'
 import { mongoose, prop, type Ref } from '@typegoose/typegoose'
-import { Task } from 'src/tasks/entities/task.entity'
+import { Task } from '../../tasks/entities/task.entity'
 
 @ObjectType()
 export class User {

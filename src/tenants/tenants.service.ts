@@ -1,5 +1,5 @@
 import { Injectable, NotFoundException } from '@nestjs/common'
-import { InjectModel } from '@nestjs/mongoose'
+import { InjectModel } from 'nestjs-typegoose'
 import { ReturnModelType } from '@typegoose/typegoose'
 import { type CreateTenantInput } from './dto/create-tenant.input'
 import { type UpdateTenantInput } from './dto/update-tenant.input'
@@ -7,7 +7,7 @@ import { Tenant } from './entities/tenant.entity'
 
 @Injectable()
 export class TenantsService {
-  constructor (@InjectModel(Tenant.name) private readonly _model: ReturnModelType<typeof Tenant>) {
+  constructor (@InjectModel(Tenant) private readonly _model: ReturnModelType<typeof Tenant>) {
   }
 
   async create (input: CreateTenantInput): Promise<Tenant> {
