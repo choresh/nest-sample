@@ -1,6 +1,7 @@
 import { Field, ID, ObjectType } from '@nestjs/graphql'
 import { mongoose, plugin, prop } from '@typegoose/typegoose'
 import * as autopopulate from 'mongoose-autopopulate'
+import { TaskDetails } from './task-details.entity'
 
 @plugin(autopopulate as any)
 @ObjectType()
@@ -9,10 +10,10 @@ export class Task {
   readonly _id: mongoose.Types.ObjectId
 
   @prop()
-    title: string
+    name: string
 
   @prop()
-    description: string
+    details: TaskDetails
 
   @prop({ required: true })
     userId: string

@@ -28,8 +28,9 @@ export class TasksService {
     if (obj === null) {
       throw new NotFoundException('Task not found')
     }
-    obj.title = (input.title ?? '')
-    obj.description = (input.description ?? '')
+    obj.name = (input.name ?? '')
+    obj.details.title = (input.details?.title ?? '')
+    obj.details.description = (input.details?.description ?? '')
     await obj.save()
     return obj
   }

@@ -102,9 +102,13 @@ The CLI will prompt you with a few questions, in order to create the desiared En
 
 Add this line within `@Module({})` of the reource:
 ```
-imports: [TypeOrmModule.forFeature([<type of the resource entity class>])],
+imports: [TypegooseModule.forFeature([<type of the resource entity class>])],
 ```
 
 ## Nest docs, code and samples
-* [docs](https://docs.nestjs.com).
-* [code and samples](https://github.com/nestjs/nest).
+* [Docs](https://docs.nestjs.com).
+* [Code and samples](https://github.com/nestjs/nest).
+
+## Prerequisites (for this project)
+* [MongoDB](https://www.mongodb.com/docs/manual/tutorial/install-mongodb-on-os-x/).
+* [Compass](https://www.mongodb.com/products/compass).
