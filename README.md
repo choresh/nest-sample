@@ -7,6 +7,11 @@ This app demonstrate combination of the folowing technologies:
 * Graphql.
 * Mongodb.
 
+## Prerequisites (for this project)
+* [MongoDB](https://www.mongodb.com/docs/manual/tutorial/install-mongodb-on-os-x/).
+* [Compass](https://www.mongodb.com/products/compass).
+* In your VC Code IDE - install the [ESLint extention](https://marketplace.visualstudio.com/items?itemName=dbaeumer.vscode-eslint) (recommended)
+
 ## How to scaffold a new project
 1. Run this command within the project parent folder:
     ```bash
@@ -32,13 +37,13 @@ This app demonstrate combination of the folowing technologies:
         }
     }
     ```
-4. In your VC Code IDE - install the [ESLint extention](https://marketplace.visualstudio.com/items?itemName=dbaeumer.vscode-eslint).
-5. Fix syntax errors accurding result of the linter.
-6. Another way to invoke the linter - run this command within the project root folder:
+
+4. Fix syntax errors accurding result of the linter.
+5. Another way to invoke the linter - run this command within the project root folder:
     ```bash
     $ npm run lint
     ```
-3. At project root folder, add file '.gitignore', with this content:
+6. At project root folder, add file '.gitignore', with this content:
     ```
     # Dependency directory
     node_modules
@@ -49,6 +54,18 @@ This app demonstrate combination of the folowing technologies:
     # Coverage reports
     coverage
     ```
+
+## How to scaffold a new resource
+Run this command within the project root folder:
+```bash
+$ npx nest g resource
+```
+The CLI will prompt you with a few questions, in order to create the desiared Entity, DTOs, Module, Resolver, Service, and Tests.
+
+Add this line within `@Module({})` of the reource:
+```
+imports: [TypegooseModule.forFeature([<type of the resource entity class>])],
+```
 
 ## Installation
 Run this command within the project root folder:
@@ -93,22 +110,6 @@ $ npm run test:e2e
 $ npm run test:cov
 ```
 
-## Adding new resource
-Run this command within the project root folder:
-```bash
-$ npx nest g resource
-```
-The CLI will prompt you with a few questions, in order to create the desiared Entity, DTOs, Module, Resolver, Service, and Tests.
-
-Add this line within `@Module({})` of the reource:
-```
-imports: [TypegooseModule.forFeature([<type of the resource entity class>])],
-```
-
 ## Nest docs, code and samples
 * [Docs](https://docs.nestjs.com).
 * [Code and samples](https://github.com/nestjs/nest).
-
-## Prerequisites (for this project)
-* [MongoDB](https://www.mongodb.com/docs/manual/tutorial/install-mongodb-on-os-x/).
-* [Compass](https://www.mongodb.com/products/compass).
