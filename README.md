@@ -12,6 +12,54 @@ This app demonstrate combination of the folowing technologies:
 * [Compass](https://www.mongodb.com/products/compass).
 * In your VC Code IDE - install the [ESLint extention](https://marketplace.visualstudio.com/items?itemName=dbaeumer.vscode-eslint) (recommended)
 
+
+## Installation
+Run this command within the project root folder:
+```bash
+$ npm install
+```
+
+## Build the app
+Run this command within the project root folder:
+```bash
+$ npm run build
+```
+
+## Running the app
+Run those commands within the project root folder:
+```bash
+# development
+$ npm run start
+
+# watch mode
+$ npm run start:dev
+
+# production mode
+$ npm run start:prod
+```
+
+## Using the app
+Open browser, and navigate to the folowing URLs:
+* Main page: http://localhost:3000.
+* Graphql playground: http://localhost:3000/graphql.
+
+## Test
+Run those commands within the project root folder:
+```bash
+# unit tests
+$ npm run test
+
+# e2e tests
+$ npm run test:e2e
+
+# test coverage
+$ npm run test:cov
+```
+
+## Nest docs, code and samples
+* [Docs](https://docs.nestjs.com).
+* [Code and samples](https://github.com/nestjs/nest).
+
 ## How to scaffold a new project
 1. Run this command within the project parent folder:
     ```bash
@@ -66,50 +114,3 @@ Add this line within `@Module({})` of the reource:
 ```
 imports: [TypegooseModule.forFeature([<type of the resource entity class>])],
 ```
-
-## Installation
-Run this command within the project root folder:
-```bash
-$ npm install
-```
-
-## Build the app
-Run this command within the project root folder:
-```bash
-$ npm run build
-```
-
-## Running the app
-Run those commands within the project root folder:
-```bash
-# development
-$ npm run start
-
-# watch mode
-$ npm run start:dev
-
-# production mode
-$ npm run start:prod
-```
-
-## Using the app
-Open browser, and navigate to the folowing URLs:
-* Main page: http://localhost:3000.
-* Graphql playground: http://localhost:3000/graphql.
-
-## Test
-Run those commands within the project root folder:
-```bash
-# unit tests
-$ npm run test
-
-# e2e tests
-$ npm run test:e2e
-
-# test coverage
-$ npm run test:cov
-```
-
-## Nest docs, code and samples
-* [Docs](https://docs.nestjs.com).
-* [Code and samples](https://github.com/nestjs/nest).
