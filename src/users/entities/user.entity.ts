@@ -17,7 +17,7 @@ export class User {
     localField: '_id',
     autopopulate: true,
     nullable: true,
-    graphQlType: [Task]
+    graphQlType: Task
   })
     // eslint-disable-next-line @typescript-eslint/array-type
     tasks: Ref<Task>[]

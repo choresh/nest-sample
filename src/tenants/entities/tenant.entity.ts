@@ -17,7 +17,7 @@ export class Tenant {
     localField: '_id',
     autopopulate: true,
     nullable: true,
-    graphQlType: [User]
+    graphQlType: User
   })
     // eslint-disable-next-line @typescript-eslint/array-type
     users: Ref<User>[]

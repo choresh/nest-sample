@@ -1,3 +1,4 @@
+import { type Type } from '@nestjs/common'
 import { Field, ID } from '@nestjs/graphql'
 import { Prop as TypegooseProp } from '@typegoose/typegoose'
 import { type ArrayPropOptions, type BasePropOptions, type MapPropOptions, type PropOptionsForNumber, type PropOptionsForString, type VirtualOptions } from '@typegoose/typegoose/lib/types'
@@ -8,11 +9,11 @@ type TypegooseOptions = BasePropOptions | ArrayPropOptions | MapPropOptions | Pr
  * 1) A GraphQL property.
  * 2) A MongoDB proerty.
  */
-export function Prop (options: TypegooseOptions & { nullable?: boolean } & { primaryKey?: boolean } & { graphQlType?: any } = {}) {
+export function Prop (options: TypegooseOptions & { nullable?: boolean } & { primaryKey?: boolean } & { graphQlType?: Type } = {}) {
   return function (target: any, key: string) {
     const type = Reflect.getMetadata('design:type', target, key)
     const graphQlType = (options.graphQlType !== undefined)
-      ? options.graphQlType
+      ? [options.graphQlType]
       : (options.primaryKey === true)
           ? ID
           : type
