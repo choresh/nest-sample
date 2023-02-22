@@ -1,11 +1,11 @@
-import { ObjectType } from '@nestjs/graphql'
-import { prop } from '@typegoose/typegoose'
+import { Entity } from 'src/infra/decorators/entity'
+import { Prop } from 'src/infra/decorators/prop'
 
-@ObjectType()
+@Entity(true)
 export class TaskDetails {
-  @prop()
+  @Prop()
     title: string
 
-  @prop()
+  @Prop()
     description: string
 }

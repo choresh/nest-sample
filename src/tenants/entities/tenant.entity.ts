@@ -1,23 +1,23 @@
-import { Field, ID, ObjectType } from '@nestjs/graphql'
 import { User } from '../../users/entities/user.entity'
-import { mongoose, plugin, prop, type Ref } from '@typegoose/typegoose'
-import * as autopopulate from 'mongoose-autopopulate'
+import { mongoose, type Ref } from '@typegoose/typegoose'
+import { Entity } from 'src/infra/decorators/entity'
+import { Prop } from 'src/infra/decorators/prop'
 
-@plugin(autopopulate as any)
-@ObjectType()
+@Entity()
 export class Tenant {
-  @Field(() => ID)
+  @Prop({ primaryKey: true })
   readonly _id: mongoose.Types.ObjectId
 
-  @prop()
+  @Prop()
     name: string
 
-  @Field(() => [User], { nullable: true })
-  @prop({
+  @Prop({
     ref: User,
     foreignField: 'tenantId',
     localField: '_id',
-    autopopulate: true
+    autopopulate: true,
+    nullable: true,
+    graphQlType: [User]
   })
     // eslint-disable-next-line @typescript-eslint/array-type
     users: Ref<User>[]
