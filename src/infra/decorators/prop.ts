@@ -10,35 +10,21 @@ type TypegooseOptions = BasePropOptions | ArrayPropOptions | MapPropOptions | Pr
  */
 export function Prop (options: TypegooseOptions & { nullable?: boolean } & { primaryKey?: boolean } & { graphQlType?: any } = {}) {
   return function (target: any, key: string) {
-    const type = (options.graphQlType !== undefined)
+    const type = Reflect.getMetadata('design:type', target, key)
+    const graphQlType = (options.graphQlType !== undefined)
       ? options.graphQlType
       : (options.primaryKey === true)
           ? ID
-          : Reflect.getMetadata('design:type', target, key)
+          : type
 
-    const propOptions = {
-      ...options,
-      type,
-      required: options.required
-    }
+    Field(() => graphQlType, { nullable: options.nullable })(target, key) // Apply the graphql @Field() decorator to the property.
 
-    // Reflect.defineMetadata('propOptions', propOptions, target, key)
-    // const fields = Reflect.getMetadata('fields', target)
-    // fields.push(key)
-    // Reflect.defineMetadata('fields', fields, target)
-
-    Field(() => type, { nullable: options.nullable })(target, key) // Apply the graphql @Field() decorator to the property.
     if (options.primaryKey !== true) {
-      TypegooseProp(propOptions)(target, key) // Apply the typegoose @Prop() decorator to the property.
+      TypegooseProp({
+        ...options,
+        type,
+        required: options.required
+      })(target, key) // Apply the typegoose @Prop() decorator to the property.
     }
   }
 }
-
-/*
-export function Prop (): ClassDecorator {
-  return (target: any) => {
-    // plugin(autopopulate as any)(target) // Apply the @plugin() decorator to the class (with 'utopopulate' plugin).
-    Field()(target) // Apply the @ObjectType() decorator to the class.
-  }
-}
-*/
