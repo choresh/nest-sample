@@ -12,10 +12,7 @@ export class Tenant {
     name: string
 
   @Prop({
-    ref: User,
     foreignField: 'tenantId',
-    localField: '_id',
-    autopopulate: true,
     nullable: true,
     type: User
   })

@@ -22,43 +22,18 @@ export function Prop (options: TypegooseOptions & { nullable?: boolean } & { pri
 
     if (options.primaryKey !== true) {
       const typegooseOptions: TypegooseOptions = {
-        ...options,
-        type: reflectedType,
-        required: options.required
+      }
+      if (options.type !== undefined) {
+        typegooseOptions.ref = options.type
+        typegooseOptions.localField = '_id'
+        typegooseOptions.autopopulate = true
+        typegooseOptions.type = reflectedType
+        typegooseOptions.foreignField = options.foreignField
+      }
+      if (options.required !== undefined) {
+        typegooseOptions.required = options.required
       }
       TypegooseProp(typegooseOptions)(target, key) // Apply the typegoose @Prop() decorator to the property.
     }
   }
 }
-
-/*
-export function Prop (options: { required?: boolean} & { foreignField?: string } & { nullable?: boolean } & { primaryKey?: boolean } & { type?: Type } = {}) {
-  return function (target: any, key: string) {
-    const reflectedType = Reflect.getMetadata('design:type', target, key)
-    const graphQlType = (options.type !== undefined)
-      ? [options.type]
-      : (options.primaryKey === true)
-          ? ID
-          : reflectedType
-
-    Field(() => graphQlType, { nullable: options.nullable })(target, key) // Apply the graphql @Field() decorator to the property.
-
-    if (options.primaryKey !== true) {
-      const typegooseOptions: TypegooseOptions = {
-        foreignField: options.foreignField,
-        localField: '_id',
-        type: reflectedType,
-        required: options.required,
-        autopopulate: true,
-        nullable: options.nullable
-      }
-      if (options.type !== undefined) {
-        typegooseOptions.ref = options.type
-      }
-      TypegooseProp({
-        typegooseOptions
-      })(target, key) // Apply the typegoose @Prop() decorator to the property.
-    }
-  }
-}
-*/

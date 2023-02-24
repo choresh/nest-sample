@@ -12,10 +12,7 @@ export class User {
     name: string
 
   @Prop({
-    ref: Task,
     foreignField: 'userId',
-    localField: '_id',
-    autopopulate: true,
     nullable: true,
     type: Task
   })
