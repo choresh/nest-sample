@@ -7,10 +7,10 @@ import * as autopopulate from 'mongoose-autopopulate'
  * 1) A GraphQL type.
  * 2) A MongoDB document (with auto-populate of refernced documents).
  */
-export function Entity (embedded: boolean = false): ClassDecorator {
+export function Entity (autopopulateChildren: boolean = true): ClassDecorator {
   return (target: any) => {
-    if (!embedded) {
-      Plugins(autopopulate as any)(target) // Apply the typegoose @Plugins() decorator to the class (with 'autopopulate' plugin).
+    if (autopopulateChildren) {
+      Plugins(autopopulate as any)(target) // Apply the typegoose @Plugins(autopopulate) decorator to the class (with 'autopopulate' plugin).
     }
     ObjectType()(target) // Apply the graphql @ObjectType() decorator to the class.
   }
