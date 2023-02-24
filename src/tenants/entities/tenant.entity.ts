@@ -12,7 +12,9 @@ export class Tenant {
     name: string
 
   @Prop({
-    foreignField: 'tenantId',
+    oneToMany: {
+      foreignField: 'tenantId'
+    },
     nullable: true,
     type: User
   })

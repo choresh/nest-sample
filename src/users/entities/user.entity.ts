@@ -12,7 +12,9 @@ export class User {
     name: string
 
   @Prop({
-    foreignField: 'userId',
+    oneToMany: {
+      foreignField: 'userId'
+    },
     nullable: true,
     type: Task
   })
