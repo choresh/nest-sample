@@ -17,7 +17,7 @@ export class User {
     localField: '_id',
     autopopulate: true,
     nullable: true,
-    graphQlType: Task
+    type: Task
   })
     tasks: Array<Ref<Task>>
 

@@ -17,7 +17,7 @@ export class Tenant {
     localField: '_id',
     autopopulate: true,
     nullable: true,
-    graphQlType: User
+    type: User
   })
     users: Array<Ref<User>>
 }

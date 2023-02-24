@@ -9,23 +9,55 @@ type TypegooseOptions = BasePropOptions | ArrayPropOptions | MapPropOptions | Pr
  * 1) A GraphQL property.
  * 2) A MongoDB proerty.
  */
-export function Prop (options: TypegooseOptions & { nullable?: boolean } & { primaryKey?: boolean } & { graphQlType?: Type } = {}) {
+export function Prop (options: TypegooseOptions & { nullable?: boolean } & { primaryKey?: boolean } & { type?: Type } = {}) {
   return function (target: any, key: string) {
-    const type = Reflect.getMetadata('design:type', target, key)
-    const graphQlType = (options.graphQlType !== undefined)
-      ? [options.graphQlType]
+    const reflectedType = Reflect.getMetadata('design:type', target, key)
+    const graphQlType = (options.type !== undefined)
+      ? [options.type]
       : (options.primaryKey === true)
           ? ID
-          : type
+          : reflectedType
 
     Field(() => graphQlType, { nullable: options.nullable })(target, key) // Apply the graphql @Field() decorator to the property.
 
     if (options.primaryKey !== true) {
       TypegooseProp({
         ...options,
-        type,
+        type: reflectedType,
         required: options.required
       })(target, key) // Apply the typegoose @Prop() decorator to the property.
     }
   }
 }
+
+/*
+export function Prop (options: { required?: boolean} & { foreignField?: string } & { nullable?: boolean } & { primaryKey?: boolean } & { type?: Type } = {}) {
+  return function (target: any, key: string) {
+    const reflectedType = Reflect.getMetadata('design:type', target, key)
+    const graphQlType = (options.type !== undefined)
+      ? [options.type]
+      : (options.primaryKey === true)
+          ? ID
+          : reflectedType
+
+    Field(() => graphQlType, { nullable: options.nullable })(target, key) // Apply the graphql @Field() decorator to the property.
+
+    if (options.primaryKey !== true) {
+      const typegooseOptions: TypegooseOptions = {
+        foreignField: options.foreignField,
+        localField: '_id',
+        type: reflectedType,
+        required: options.required,
+        autopopulate: true,
+        nullable: options.nullable
+      }
+      if (options.type !== undefined) {
+        typegooseOptions.ref = options.type
+      }
+      TypegooseProp({
+        typegooseOptions
+      })(target, key) // Apply the typegoose @Prop() decorator to the property.
+    }
+  }
+}
+*/
