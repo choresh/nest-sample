@@ -1,7 +1,7 @@
 import { mongoose, type Ref } from '@typegoose/typegoose'
 import { Task } from '../../tasks/entities/task.entity'
-import { Entity } from '../../../src/infra/decorators/entity'
-import { Prop } from '../../../src/infra/decorators/prop'
+import { Entity } from '../../infra/decorators/entity'
+import { Prop } from '../../infra/decorators/prop'
 
 @Entity()
 export class User {
