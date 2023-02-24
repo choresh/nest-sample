@@ -1,4 +1,6 @@
-import { Test, type TestingModule } from '@nestjs/testing'
+import { Test } from '@nestjs/testing'
+import { getModelToken } from 'nestjs-typegoose'
+import { Tenant } from './entities/tenant.entity'
 import { TenantsResolver } from './tenants.resolver'
 import { TenantsService } from './tenants.service'
 
@@ -6,8 +8,22 @@ describe('TenantsResolver', () => {
   let resolver: TenantsResolver
 
   beforeEach(async () => {
-    const module: TestingModule = await Test.createTestingModule({
-      providers: [TenantsResolver, TenantsService]
+    function mockModel (dto: any): any {
+      this.data = dto
+      this.save = () => {
+        return this.data
+      }
+    }
+
+    const module = await Test.createTestingModule({
+      providers: [
+        TenantsService,
+        TenantsResolver,
+        {
+          provide: getModelToken(Tenant.name),
+          useValue: mockModel
+        }
+      ]
     }).compile()
 
     resolver = module.get<TenantsResolver>(TenantsResolver)

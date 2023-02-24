@@ -1,6 +1,6 @@
 import { mongoose } from '@typegoose/typegoose'
-import { Entity } from 'src/infra/decorators/entity'
-import { Prop } from 'src/infra/decorators/prop'
+import { Entity } from '../../../src/infra/decorators/entity'
+import { Prop } from '../../../src/infra/decorators/prop'
 import { TaskDetails } from './task-details.entity'
 
 @Entity()
