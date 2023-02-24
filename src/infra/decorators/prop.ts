@@ -21,11 +21,12 @@ export function Prop (options: TypegooseOptions & { nullable?: boolean } & { pri
     Field(() => graphQlType, { nullable: options.nullable })(target, key) // Apply the graphql @Field() decorator to the property.
 
     if (options.primaryKey !== true) {
-      TypegooseProp({
+      const typegooseOptions: TypegooseOptions = {
         ...options,
         type: reflectedType,
         required: options.required
-      })(target, key) // Apply the typegoose @Prop() decorator to the property.
+      }
+      TypegooseProp(typegooseOptions)(target, key) // Apply the typegoose @Prop() decorator to the property.
     }
   }
 }
