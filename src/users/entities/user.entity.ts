@@ -19,8 +19,7 @@ export class User {
     nullable: true,
     graphQlType: Task
   })
-    // eslint-disable-next-line @typescript-eslint/array-type
-    tasks: Ref<Task>[]
+    tasks: Array<Ref<Task>>
 
   @Prop({ required: true })
     tenantId: string

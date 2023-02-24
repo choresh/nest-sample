@@ -19,6 +19,5 @@ export class Tenant {
     nullable: true,
     graphQlType: User
   })
-    // eslint-disable-next-line @typescript-eslint/array-type
-    users: Ref<User>[]
+    users: Array<Ref<User>>
 }
