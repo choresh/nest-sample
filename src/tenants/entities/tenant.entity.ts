@@ -1,13 +1,11 @@
 import { User } from '../../users/entities/user.entity'
-import { mongoose, type Ref } from '@typegoose/typegoose'
+import { type Ref } from '@typegoose/typegoose'
 import { Entity } from '../../infra/decorators/entity'
 import { Prop } from '../../infra/decorators/prop'
+import { Identifiable } from '../../infra/bases/identifiable'
 
 @Entity()
-export class Tenant {
-  @Prop({ primaryKey: true })
-  readonly _id: mongoose.Types.ObjectId
-
+export class Tenant extends Identifiable {
   @Prop()
     name: string
 
