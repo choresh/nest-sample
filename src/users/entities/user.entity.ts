@@ -4,7 +4,7 @@ import { Entity } from '../../infra/decorators/entity'
 import { Prop } from '../../infra/decorators/prop'
 import { Identifiable } from '../../infra/bases/identifiable'
 
-@Entity()
+@Entity({ autopopulateChildren: true })
 export class User extends Identifiable {
   @Prop()
     name: string
