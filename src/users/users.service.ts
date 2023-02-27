@@ -5,10 +5,11 @@ import { type CreateUserInput } from './dto/create-user.input'
 import { type UpdateUserInput } from './dto/update-user.input'
 import { User } from './entities/user.entity'
 import * as autopopulate from 'mongoose-autopopulate'
+import { type IService } from '../../src/infra/bases/iService'
 
 @plugin(autopopulate as any)
 @Injectable()
-export class UsersService {
+export class UsersService implements IService<User, CreateUserInput, UpdateUserInput> {
   constructor (@InjectModel(User) private readonly _model: ReturnModelType<typeof User>) {
   }
 

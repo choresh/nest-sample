@@ -4,9 +4,10 @@ import { ReturnModelType } from '@typegoose/typegoose'
 import { type CreateTenantInput } from './dto/create-tenant.input'
 import { type UpdateTenantInput } from './dto/update-tenant.input'
 import { Tenant } from './entities/tenant.entity'
+import { type IService } from '../../src/infra/bases/iService'
 
 @Injectable()
-export class TenantsService {
+export class TenantsService implements IService<Tenant, CreateTenantInput, UpdateTenantInput> {
   constructor (@InjectModel(Tenant) private readonly _model: ReturnModelType<typeof Tenant>) {
   }
 

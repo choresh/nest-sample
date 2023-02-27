@@ -1,12 +1,13 @@
 import { Injectable, NotFoundException } from '@nestjs/common'
 import { ReturnModelType } from '@typegoose/typegoose'
 import { InjectModel } from 'nestjs-typegoose'
+import { type IService } from '../../src/infra/bases/iService'
 import { type CreateTaskInput } from './dto/create-task.input'
 import { type UpdateTaskInput } from './dto/update-task.input'
 import { Task } from './entities/task.entity'
 
 @Injectable()
-export class TasksService {
+export class TasksService implements IService<Task, CreateTaskInput, UpdateTaskInput> {
   constructor (@InjectModel(Task) private readonly _model: ReturnModelType<typeof Task>) {
   }
 
