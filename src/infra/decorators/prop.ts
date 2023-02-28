@@ -20,7 +20,6 @@ const PRIMARY_KEYS_TYPE = ID
  * 1) A GraphQL property.
  * 2) A MongoDB proerty.
  */
-
 export function Prop (options: { nullable?: boolean } & { primaryKey?: boolean } & { ref?: () => Type<any> } & { oneToMany?: OneToMany } & { manyToOne?: ManyToOne } & { required?: boolean } = {}) {
   return function (target: any, key: string) {
     const reflectedType = Reflect.getMetadata('design:type', target, key)
@@ -45,25 +44,25 @@ export function Prop (options: { nullable?: boolean } & { primaryKey?: boolean }
       if (options.required !== undefined) {
         typegooseOptions.required = options.required
       }
-      if (options.oneToMany !== undefined) {
+      if ((options.oneToMany !== undefined) || (options.manyToOne !== undefined)) {
         if (options.ref === undefined) {
           throw new Error(`Option 'ref' is required, at '@Prop()' decorator, above property '${target.constructor.name as string}.${key}'`)
         }
-        typegooseOptions.foreignField = options.oneToMany.foreignField
-        typegooseOptions.ref = options.ref
-        typegooseOptions.localField = PRIMARY_KEYS_NAME
-        typegooseOptions.autopopulate = true
-        typegooseOptions.type = reflectedType
-      }
-      if (options.manyToOne !== undefined) {
-        if (options.ref === undefined) {
-          throw new Error(`Option 'ref' is required, at '@Prop()' decorator, above property '${target.constructor.name as string}.${key}'`)
+        if ((options.oneToMany !== undefined) && (options.manyToOne !== undefined)) {
+          throw new Error(`Options 'oneToMany' and 'manyToOne' cannot defined togather, at '@Prop()' decorator, above property '${target.constructor.name as string}.${key}'`)
         }
-        typegooseOptions.foreignField = PRIMARY_KEYS_NAME
+        if (options.oneToMany !== undefined) {
+          typegooseOptions.foreignField = options.oneToMany.foreignField
+          typegooseOptions.localField = PRIMARY_KEYS_NAME
+        }
+        if (options.manyToOne !== undefined) {
+          typegooseOptions.foreignField = PRIMARY_KEYS_NAME
+          typegooseOptions.localField = options.manyToOne.localField
+        }
         typegooseOptions.ref = options.ref
-        typegooseOptions.localField = options.manyToOne.localField
         typegooseOptions.autopopulate = true
         typegooseOptions.type = reflectedType
+        typegooseOptions.autopopulate = true
       }
       TypegooseProp(typegooseOptions)(target, key) // Apply the typegoose @Prop() decorator to the property.
     }
