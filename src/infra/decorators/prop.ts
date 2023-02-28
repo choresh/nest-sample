@@ -3,6 +3,8 @@ import { Field, ID, type ReturnTypeFunc } from '@nestjs/graphql'
 import { Prop as TypegooseProp } from '@typegoose/typegoose'
 import { type ArrayPropOptions, type BasePropOptions, type MapPropOptions, type PropOptionsForNumber, type PropOptionsForString, type VirtualOptions } from '@typegoose/typegoose/lib/types'
 type TypegooseOptions = BasePropOptions | ArrayPropOptions | MapPropOptions | PropOptionsForNumber | PropOptionsForString | VirtualOptions
+const PRIMARY_KEYS_NAME = '_id'
+const PRIMARY_KEYS_TYPE = ID
 
 export interface OneToMany {
   foreignField: string
@@ -12,15 +14,21 @@ export interface ManyToOne {
   localField: string
 }
 
-const PRIMARY_KEYS_NAME = '_id'
-const PRIMARY_KEYS_TYPE = ID
+export interface PropOptions {
+  nullable?: boolean
+  primaryKey?: boolean
+  ref?: () => Type<any>
+  required?: boolean
+  oneToMany?: OneToMany
+  manyToOne?: ManyToOne
+}
 
 /**
  * Decorator that marks a property as:
  * 1) A GraphQL property.
  * 2) A MongoDB proerty.
  */
-export function Prop (options: { nullable?: boolean } & { primaryKey?: boolean } & { ref?: () => Type<any> } & { oneToMany?: OneToMany } & { manyToOne?: ManyToOne } & { required?: boolean } = {}) {
+export function Prop (options: PropOptions = {}) {
   return function (target: any, key: string) {
     const reflectedType = Reflect.getMetadata('design:type', target, key)
 
@@ -54,6 +62,7 @@ export function Prop (options: { nullable?: boolean } & { primaryKey?: boolean }
         if (options.oneToMany !== undefined) {
           typegooseOptions.foreignField = options.oneToMany.foreignField
           typegooseOptions.localField = PRIMARY_KEYS_NAME
+          typegooseOptions.autopopulate = true
         }
         if (options.manyToOne !== undefined) {
           typegooseOptions.foreignField = PRIMARY_KEYS_NAME
@@ -62,7 +71,6 @@ export function Prop (options: { nullable?: boolean } & { primaryKey?: boolean }
         typegooseOptions.ref = options.ref
         typegooseOptions.autopopulate = true
         typegooseOptions.type = reflectedType
-        typegooseOptions.autopopulate = true
       }
       TypegooseProp(typegooseOptions)(target, key) // Apply the typegoose @Prop() decorator to the property.
     }
