@@ -62,7 +62,6 @@ export function Prop (options: PropOptions = {}) {
         if (options.oneToMany !== undefined) {
           typegooseOptions.foreignField = options.oneToMany.foreignField
           typegooseOptions.localField = PRIMARY_KEYS_NAME
-          typegooseOptions.autopopulate = true
         }
         if (options.manyToOne !== undefined) {
           typegooseOptions.foreignField = PRIMARY_KEYS_NAME
