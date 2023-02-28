@@ -18,7 +18,6 @@ export interface PropOptions {
   nullable?: boolean
   primaryKey?: boolean
   ref?: () => Type<any>
-  required?: boolean
   oneToMany?: OneToMany
   manyToOne?: ManyToOne
 }
@@ -48,9 +47,7 @@ export function Prop (options: PropOptions = {}) {
 
     if (options.primaryKey !== true) {
       const typegooseOptions: TypegooseOptions = {
-      }
-      if (options.required !== undefined) {
-        typegooseOptions.required = options.required
+        required: (options.nullable !== true)
       }
       if ((options.oneToMany !== undefined) || (options.manyToOne !== undefined)) {
         if (options.ref === undefined) {

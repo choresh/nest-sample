@@ -14,19 +14,19 @@ export class User extends Identifiable {
     oneToMany: {
       foreignField: 'userId'
     },
-    nullable: true,
+    // nullable: true,
     ref: () => Task
   })
     tasks: Array<Ref<Task>>
 
-  @Prop({ required: true })
+  @Prop()
     tenantId: string
 
   @Prop({
     manyToOne: {
       localField: 'tenantId'
     },
-    nullable: true,
+    // nullable: true,
     ref: () => Tenant
   })
     tenant: Ref<Tenant>

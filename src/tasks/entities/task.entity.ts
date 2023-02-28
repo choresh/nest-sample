@@ -11,6 +11,6 @@ export class Task extends Identifiable {
   @Prop()
     details: TaskDetails
 
-  @Prop({ required: true })
+  @Prop()
     userId: string
 }
