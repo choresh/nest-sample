@@ -3,6 +3,7 @@ import { Task } from '../../tasks/entities/task.entity'
 import { Entity } from '../../infra/decorators/entity'
 import { Prop } from '../../infra/decorators/prop'
 import { Identifiable } from '../../infra/bases/identifiable'
+import { Tenant } from 'src/tenants/entities/tenant.entity'
 
 @Entity({ autopopulateChildren: true })
 export class User extends Identifiable {
@@ -14,10 +15,19 @@ export class User extends Identifiable {
       foreignField: 'userId'
     },
     nullable: true,
-    type: Task
+    ref: () => Task
   })
     tasks: Array<Ref<Task>>
 
   @Prop({ required: true })
     tenantId: string
+
+  @Prop({
+    manyToOne: {
+      localField: 'tenantId'
+    },
+    nullable: true,
+    ref: () => Tenant
+  })
+    tenant: Ref<Tenant>
 }

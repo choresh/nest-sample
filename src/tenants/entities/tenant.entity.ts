@@ -14,7 +14,7 @@ export class Tenant extends Identifiable {
       foreignField: 'tenantId'
     },
     nullable: true,
-    type: User
+    ref: () => User
   })
     users: Array<Ref<User>>
 }
