@@ -10,8 +10,9 @@ import * as autopopulate from 'mongoose-autopopulate'
 export function Entity (options?: { autopopulateChildren?: boolean }): ClassDecorator {
   return (target: any) => {
     if (options?.autopopulateChildren === true) {
-      Plugins(autopopulate as any)(target) // Apply the typegoose @Plugins(autopopulate) decorator to the class (with 'autopopulate' plugin).
+      Plugins(autopopulate as any)(target) // Apply the typegoose @Plugins() decorator to the class (with 'autopopulate' plugin).
     }
+    // InputType(`${(target as Type).name}Input`)(target) // Apply the graphql @InputType() decorator to the class.
     ObjectType()(target) // Apply the graphql @ObjectType() decorator to the class.
   }
 }
