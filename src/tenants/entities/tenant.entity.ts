@@ -11,10 +11,9 @@ export class Tenant extends Identifiable {
 
   @Prop({
     oneToMany: {
-      foreignField: 'tenantId'
-    },
-    nullable: true,
-    ref: () => User
+      foreignField: 'tenantId',
+      ref: () => User
+    }
   })
     users: Array<Ref<User>>
 }

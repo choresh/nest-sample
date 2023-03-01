@@ -6,18 +6,21 @@ type TypegooseOptions = BasePropOptions | ArrayPropOptions | MapPropOptions | Pr
 const PRIMARY_KEYS_NAME = '_id'
 const PRIMARY_KEYS_TYPE = ID
 
-export interface OneToMany {
+export interface Relation {
+  ref: () => Type<any>
+}
+
+export interface OneToMany extends Relation {
   foreignField: string
 }
 
-export interface ManyToOne {
+export interface ManyToOne extends Relation {
   localField: string
 }
 
 export interface PropOptions {
   nullable?: boolean
   primaryKey?: boolean
-  ref?: () => Type<any>
   oneToMany?: OneToMany
   manyToOne?: ManyToOne
 }
@@ -31,14 +34,15 @@ export function Prop (options: PropOptions = {}) {
   return function (target: any, key: string) {
     const reflectedType = Reflect.getMetadata('design:type', target, key)
 
-    if ((options.ref !== undefined) && (options.primaryKey === true)) {
+    const ref = options.manyToOne?.ref ?? options.oneToMany?.ref
+    if ((ref !== undefined) && (options.primaryKey === true)) {
       throw new Error(`Options 'ref' and 'primaryKey' cannot defined togather, at '@Prop()' decorator, above property '${target.constructor.name as string}.${key}'`)
     }
 
-    const graphQlType: ReturnTypeFunc = (options.ref !== undefined)
+    const graphQlType: ReturnTypeFunc = (ref !== undefined)
       ? (reflectedType.name === 'Array')
-          ? () => [options.ref?.()]
-          : options.ref
+          ? () => [ref?.()]
+          : ref
       : (options.primaryKey === true)
           ? () => PRIMARY_KEYS_TYPE
           : () => reflectedType
@@ -50,7 +54,7 @@ export function Prop (options: PropOptions = {}) {
         required: (options.nullable !== true)
       }
       if ((options.oneToMany !== undefined) || (options.manyToOne !== undefined)) {
-        if (options.ref === undefined) {
+        if (ref === undefined) {
           throw new Error(`Option 'ref' is required, at '@Prop()' decorator, above property '${target.constructor.name as string}.${key}'`)
         }
         if ((options.oneToMany !== undefined) && (options.manyToOne !== undefined)) {
@@ -64,7 +68,7 @@ export function Prop (options: PropOptions = {}) {
           typegooseOptions.foreignField = PRIMARY_KEYS_NAME
           typegooseOptions.localField = options.manyToOne.localField
         }
-        typegooseOptions.ref = options.ref
+        typegooseOptions.ref = ref
         typegooseOptions.autopopulate = true
         typegooseOptions.type = reflectedType
       }

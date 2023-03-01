@@ -12,10 +12,9 @@ export class User extends Identifiable {
 
   @Prop({
     oneToMany: {
-      foreignField: 'userId'
-    },
-    // nullable: true,
-    ref: () => Task
+      foreignField: 'userId',
+      ref: () => Task
+    }
   })
     tasks: Array<Ref<Task>>
 
@@ -24,10 +23,9 @@ export class User extends Identifiable {
 
   @Prop({
     manyToOne: {
-      localField: 'tenantId'
-    },
-    // nullable: true,
-    ref: () => Tenant
+      localField: 'tenantId',
+      ref: () => Tenant
+    }
   })
     tenant: Ref<Tenant>
 }
