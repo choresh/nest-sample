@@ -33,7 +33,8 @@
     "mongoose": "^6.9.2",
     "@typegoose/typegoose": "^10.1.1",
     "nestjs-typegoose": "^7.1.38",
-    "mongoose-autopopulate": "^0.17.1"
+    "mongoose-autopopulate": "^0.17.1",
+    "nestjs-dataloader": "^9.0.0"
   },
   "devDependencies": {
     "@nestjs/cli": "^9.2.0",

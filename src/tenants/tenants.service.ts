@@ -23,6 +23,10 @@ export class TenantsService {
     return await this._model.findById(id)
   }
 
+  async findByIds (ids: readonly string[]): Promise<Tenant[]> {
+    return await this._model.find({ _id: { $in: ids } })
+  }
+
   async update (id: string, input: UpdateTenantInput): Promise<Tenant> {
     const obj = await this._model.findById(id)
     if (obj === null) {

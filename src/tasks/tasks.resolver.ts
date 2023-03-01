@@ -3,6 +3,10 @@ import { TasksService } from './tasks.service'
 import { Task } from './entities/task.entity'
 import { CreateTaskInput } from './dto/create-task.input'
 import { UpdateTaskInput } from './dto/update-task.input'
+import { TasksLoader } from './tasks.loader'
+import DataLoader from 'dataloader'
+import { Loader } from 'nestjs-dataloader'
+import { ObjectId } from 'mongoose'
 
 @Resolver(() => Task)
 export class TasksResolver {
@@ -19,9 +23,20 @@ export class TasksResolver {
     return await this.tasksService.findAll()
   }
 
+  @Query(() => [Task])
+  async getTasks (
+    @Args({ name: 'ids', type: () => [String] }) ids: ObjectId[],
+      @Loader(TasksLoader) loader: DataLoader<Task['_id'], Task>
+  ): Promise<Array<Task | Error>> {
+    return await loader.loadMany(ids)
+  }
+
   @Query(() => Task, { name: 'task' })
-  async findOne (@Args('id', { type: () => String }) id: string): Promise<Task | null> {
-    return await this.tasksService.findOne(id)
+  async findOne (
+    @Args('id', { type: () => String }) id: ObjectId,
+      @Loader(TasksLoader) loader: DataLoader<Task['_id'], Task>
+  ): Promise<Task> {
+    return await loader.load(id)
   }
 
   @Mutation(() => Task)
@@ -34,3 +49,8 @@ export class TasksResolver {
     await this.tasksService.remove(id)
   }
 }
+/*
+function Loader(TasksLoader: typeof TasksLoader) {
+  throw new Error('Function not implemented.')
+}
+*/

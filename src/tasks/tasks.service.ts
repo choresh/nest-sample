@@ -23,6 +23,10 @@ export class TasksService {
     return await this._model.findById(id)
   }
 
+  async findByIds (ids: readonly string[]): Promise<Task[]> {
+    return await this._model.find({ _id: { $in: ids } })
+  }
+
   async update (id: string, input: UpdateTaskInput): Promise<Task> {
     const obj = await this._model.findById(id)
     if (obj === null) {
