@@ -41,7 +41,7 @@ export function Prop (options: PropOptions = {}) {
 
     const graphQlType: ReturnTypeFunc = (ref !== undefined)
       ? (reflectedType.name === 'Array')
-          ? () => [ref?.()]
+          ? () => [ref()]
           : ref
       : (options.primaryKey === true)
           ? () => PRIMARY_KEYS_TYPE
