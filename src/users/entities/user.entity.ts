@@ -28,4 +28,12 @@ export class User extends Identifiable {
     }
   })
     tenant: Ref<Tenant>
+
+  @Prop({
+    oneToMany: {
+      foreignField: 'userId',
+      ref: () => Task
+    }
+  })
+    friends: Array<Ref<User>>
 }
