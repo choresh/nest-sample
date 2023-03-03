@@ -31,6 +31,13 @@ export class TenantsResolver {
     return await loader.loadMany(ids)
   }
 
+  @Query(() => [Tenant])
+  async getTenantsNoLoader (
+    @Args({ name: 'ids', type: () => [String] }) ids: string[]
+  ): Promise<Tenant[]> {
+    return await this.tenantsService.findByIds(ids)
+  }
+
   @Query(() => Tenant, { name: 'tenant' })
   async findOne (
     @Args('id', { type: () => String }) id: ObjectId,

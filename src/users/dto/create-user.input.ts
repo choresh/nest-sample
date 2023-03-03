@@ -7,4 +7,7 @@ export class CreateUserInput {
 
   @Field()
     tenantId: string
+
+  @Field({ nullable: true })
+    parentId: string
 }

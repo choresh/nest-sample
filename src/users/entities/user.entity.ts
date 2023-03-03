@@ -3,7 +3,7 @@ import { Task } from '../../tasks/entities/task.entity'
 import { Entity } from '../../infra/decorators/entity'
 import { Prop } from '../../infra/decorators/prop'
 import { Identifiable } from '../../infra/bases/identifiable'
-import { Tenant } from 'src/tenants/entities/tenant.entity'
+// import { Tenant } from 'src/tenants/entities/tenant.entity'
 
 @Entity({ autopopulateChildren: true })
 export class User extends Identifiable {
@@ -21,6 +21,7 @@ export class User extends Identifiable {
   @Prop()
     tenantId: string
 
+  /*
   @Prop({
     manyToOne: {
       localField: 'tenantId',
@@ -28,12 +29,16 @@ export class User extends Identifiable {
     }
   })
     tenant: Ref<Tenant>
+  */
+
+  @Prop({ nullable: true })
+    parentId: string
 
   @Prop({
     oneToMany: {
-      foreignField: 'userId',
-      ref: () => Task
+      foreignField: 'parentId',
+      ref: () => User
     }
   })
-    friends: Array<Ref<User>>
+    childern: Array<Ref<User>>
 }
