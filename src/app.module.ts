@@ -8,6 +8,7 @@ import { TasksModule } from './tasks/tasks.module'
 import { TenantsModule } from './tenants/tenants.module'
 import { TypegooseModule } from 'nestjs-typegoose'
 import mongoose from 'mongoose'
+import { DataloaderModule } from '@tracworx/nestjs-dataloader'
 
 mongoose.set('debug', (collection: string, method: string, query: any, doc: any) => {
   // console.log(`${collectionName}.${method}`, JSON.stringify(query), doc)
@@ -23,6 +24,7 @@ mongoose.set('debug', (collection: string, method: string, query: any, doc: any)
       driver: ApolloDriver,
       autoSchemaFile: true
     }),
+    DataloaderModule,
     UsersModule,
     TasksModule,
     TenantsModule

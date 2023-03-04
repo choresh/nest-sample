@@ -1,12 +1,11 @@
 import { Resolver, Query, Mutation, Args } from '@nestjs/graphql'
 import { UsersService } from './users.service'
+import { UsersLoader } from './users.loader'
 import { User } from './entities/user.entity'
 import { CreateUserInput } from './dto/create-user.input'
 import { UpdateUserInput } from './dto/update-user.input'
-import { UsersLoader } from './users.loader'
-import DataLoader from 'dataloader'
-import { Loader } from 'nestjs-dataloader'
-import { ObjectId } from 'mongoose'
+import { Loader } from '@tracworx/nestjs-dataloader'
+import * as DataLoader from 'dataloader'
 
 @Resolver(() => User)
 export class UsersResolver {
@@ -23,20 +22,17 @@ export class UsersResolver {
     return await this.usersService.findAll()
   }
 
-  @Query(() => [User])
-  async getUsers (
-    @Args({ name: 'ids', type: () => [String] }) ids: ObjectId[],
-      @Loader(UsersLoader) loader: DataLoader<User['_id'], User>
-  ): Promise<Array<User | Error>> {
-    return await loader.loadMany(ids)
+  @Query(() => User, { name: 'user' })
+  async findOne (@Args('id', { type: () => String }) id: string,
+    @Loader(UsersLoader) loader): Promise<User | null> {
+    return loader.load(id)
   }
 
-  @Query(() => User, { name: 'user' })
-  async findOne (
-    @Args('id', { type: () => String }) id: ObjectId,
-      @Loader(UsersLoader) loader: DataLoader<User['_id'], User>
-  ): Promise<User> {
-    return await loader.load(id)
+  @Query(() => [User])
+  async getUsers (
+    @Args({ name: 'ids', type: () => [String] }) ids: string[],
+      @Loader(UsersLoader) loader: DataLoader<string, User>): Promise<Array<User | Error>> {
+    return await loader.loadMany(ids)
   }
 
   @Mutation(() => User)

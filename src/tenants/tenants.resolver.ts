@@ -4,9 +4,9 @@ import { Tenant } from './entities/tenant.entity'
 import { CreateTenantInput } from './dto/create-tenant.input'
 import { UpdateTenantInput } from './dto/update-tenant.input'
 import { TenantsLoader } from './tenants.loader'
-import DataLoader from 'dataloader'
-import { Loader } from 'nestjs-dataloader'
 import { ObjectId } from 'mongoose'
+import { Loader } from '@tracworx/nestjs-dataloader'
+import * as DataLoader from 'dataloader'
 
 @Resolver(() => Tenant)
 export class TenantsResolver {

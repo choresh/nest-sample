@@ -4,9 +4,9 @@ import { Task } from './entities/task.entity'
 import { CreateTaskInput } from './dto/create-task.input'
 import { UpdateTaskInput } from './dto/update-task.input'
 import { TasksLoader } from './tasks.loader'
-import DataLoader from 'dataloader'
-import { Loader } from 'nestjs-dataloader'
 import { ObjectId } from 'mongoose'
+import { Loader } from '@tracworx/nestjs-dataloader'
+import * as DataLoader from 'dataloader'
 
 @Resolver(() => Task)
 export class TasksResolver {

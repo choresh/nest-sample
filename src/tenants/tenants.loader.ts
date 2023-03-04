@@ -1,15 +1,16 @@
 import * as DataLoader from 'dataloader'
-import { Injectable } from '@nestjs/common'
-import { type NestDataLoader } from 'nestjs-dataloader'
+import { DataloaderProvider } from '@tracworx/nestjs-dataloader'
 import { type Tenant } from './entities/tenant.entity'
+import { type GqlExecutionContext } from '@nestjs/graphql'
 import { TenantsService } from './tenants.service'
 
-@Injectable()
-export class TenantsLoader implements NestDataLoader<string, Tenant> {
+@DataloaderProvider()
+export class TenantsLoader {
   constructor (private readonly service: TenantsService) {
   }
 
-  generateDataLoader (): DataLoader<string, Tenant> {
-    return new DataLoader<string, Tenant>(async (keys) => await this.service.findByIds(keys))
+  createDataloader (ctx: GqlExecutionContext): DataLoader<string, Tenant> {
+    // const tenant = ctx.getContext().req.tenant // Use this line if need to fetch request-scoped context data
+    return new DataLoader<string, Tenant>(async (ids) => await this.service.findByIds(ids))
   }
 }
