@@ -5,7 +5,7 @@ import { TasksResolver } from './tasks.resolver'
 import { Task } from './entities/task.entity'
 import { TasksLoader } from './tasks.loader'
 import { APP_INTERCEPTOR } from '@nestjs/core'
-import { DataLoaderInterceptor } from 'nestjs-dataloader'
+import { DataLoaderInterceptor } from 'nestjs-graphql-dataloader'
 
 @Module({
   imports: [TypegooseModule.forFeature([Task])],

@@ -1,15 +1,16 @@
-import * as DataLoader from 'dataloader'
-import { Injectable } from '@nestjs/common'
-import { type NestDataLoader } from 'nestjs-dataloader'
+import { Injectable, Scope } from '@nestjs/common'
+import { OrderedNestDataLoader } from 'nestjs-graphql-dataloader'
 import { type Tenant } from './entities/tenant.entity'
 import { TenantsService } from './tenants.service'
 
-@Injectable()
-export class TenantsLoader implements NestDataLoader<string, Tenant> {
+@Injectable({ scope: Scope.REQUEST })
+export class TenantsLoader extends OrderedNestDataLoader<Tenant['_id'], Tenant> {
   constructor (private readonly service: TenantsService) {
+    super()
   }
 
-  generateDataLoader (): DataLoader<string, Tenant> {
-    return new DataLoader<string, Tenant>(async (keys) => await this.service.findByIds(keys))
-  }
+  // eslint-disable-next-line @typescript-eslint/explicit-function-return-type
+  protected getOptions = () => ({
+    query: async (keys: string[]) => await this.service.findByIds(keys)
+  })
 }

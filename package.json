@@ -34,7 +34,7 @@
     "@typegoose/typegoose": "^10.1.1",
     "nestjs-typegoose": "^7.1.38",
     "mongoose-autopopulate": "^0.17.1",
-    "nestjs-dataloader": "^9.0.0"
+    "nestjs-graphql-dataloader": "^0.1.28"
   },
   "devDependencies": {
     "@nestjs/cli": "^9.2.0",

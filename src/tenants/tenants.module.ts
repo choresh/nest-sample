@@ -5,7 +5,7 @@ import { Tenant } from './entities/tenant.entity'
 import { TypegooseModule } from 'nestjs-typegoose'
 import { TenantsLoader } from './tenants.loader'
 import { APP_INTERCEPTOR } from '@nestjs/core'
-import { DataLoaderInterceptor } from 'nestjs-dataloader'
+import { DataLoaderInterceptor } from 'nestjs-graphql-dataloader'
 
 @Module({
   imports: [TypegooseModule.forFeature([Tenant])],

@@ -5,7 +5,7 @@ import { User } from './entities/user.entity'
 import { TypegooseModule } from 'nestjs-typegoose'
 import { UsersLoader } from './users.loader'
 import { APP_INTERCEPTOR } from '@nestjs/core'
-import { DataLoaderInterceptor } from 'nestjs-dataloader'
+import { DataLoaderInterceptor } from 'nestjs-graphql-dataloader'
 
 @Module({
   imports: [TypegooseModule.forFeature([User])],

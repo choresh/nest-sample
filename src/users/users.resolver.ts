@@ -5,8 +5,8 @@ import { CreateUserInput } from './dto/create-user.input'
 import { UpdateUserInput } from './dto/update-user.input'
 import { UsersLoader } from './users.loader'
 import DataLoader from 'dataloader'
-import { Loader } from 'nestjs-dataloader'
 import { ObjectId } from 'mongoose'
+import { Loader } from 'nestjs-graphql-dataloader'
 
 @Resolver(() => User)
 export class UsersResolver {
@@ -49,8 +49,3 @@ export class UsersResolver {
     await this.usersService.remove(id)
   }
 }
-/*
-function Loader(UsersLoader: typeof UsersLoader) {
-  throw new Error('Function not implemented.')
-}
-*/
