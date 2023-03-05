@@ -3,10 +3,6 @@ import { TenantsService } from './tenants.service'
 import { Tenant } from './entities/tenant.entity'
 import { CreateTenantInput } from './dto/create-tenant.input'
 import { UpdateTenantInput } from './dto/update-tenant.input'
-import { TenantsLoader } from './tenants.loader'
-import DataLoader from 'dataloader'
-import { Loader } from 'nestjs-dataloader'
-import { ObjectId } from 'mongoose'
 
 @Resolver(() => Tenant)
 export class TenantsResolver {
@@ -23,20 +19,9 @@ export class TenantsResolver {
     return await this.tenantsService.findAll()
   }
 
-  @Query(() => [Tenant])
-  async getTenants (
-    @Args({ name: 'ids', type: () => [String] }) ids: ObjectId[],
-      @Loader(TenantsLoader) loader: DataLoader<Tenant['_id'], Tenant>
-  ): Promise<Array<Tenant | Error>> {
-    return await loader.loadMany(ids)
-  }
-
   @Query(() => Tenant, { name: 'tenant' })
-  async findOne (
-    @Args('id', { type: () => String }) id: ObjectId,
-      @Loader(TenantsLoader) loader: DataLoader<Tenant['_id'], Tenant>
-  ): Promise<Tenant> {
-    return await loader.load(id)
+  async findOne (@Args('id', { type: () => String }) id: string): Promise<Tenant | null> {
+    return await this.tenantsService.findOne(id)
   }
 
   @Mutation(() => Tenant)
@@ -49,8 +34,3 @@ export class TenantsResolver {
     await this.tenantsService.remove(id)
   }
 }
-/*
-function Loader(TenantsLoader: typeof TenantsLoader) {
-  throw new Error('Function not implemented.')
-}
-*/

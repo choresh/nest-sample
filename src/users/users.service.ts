@@ -25,10 +25,6 @@ export class UsersService {
     return await this._model.findById(id)
   }
 
-  async findByIds (ids: readonly string[]): Promise<User[]> {
-    return await this._model.find({ _id: { $in: ids } })
-  }
-
   async update (id: string, input: UpdateUserInput): Promise<User> {
     const obj = await this._model.findById(id)
     if (obj === null) {
