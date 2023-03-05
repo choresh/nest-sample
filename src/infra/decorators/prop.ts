@@ -63,14 +63,15 @@ export function Prop (options: PropOptions = {}) {
         if (options.oneToMany !== undefined) {
           typegooseOptions.foreignField = options.oneToMany.foreignField
           typegooseOptions.localField = PRIMARY_KEYS_NAME
+          typegooseOptions.autopopulate = true
         }
         if (options.manyToOne !== undefined) {
           typegooseOptions.foreignField = PRIMARY_KEYS_NAME
           typegooseOptions.localField = options.manyToOne.localField
           typegooseOptions.justOne = true
+          typegooseOptions.autopopulate = { maxDepth: 1 }
         }
         typegooseOptions.ref = ref
-        typegooseOptions.autopopulate = true
         typegooseOptions.type = reflectedType
       }
       TypegooseProp(typegooseOptions)(target, key) // Apply the typegoose @Prop() decorator to the property.
