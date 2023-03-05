@@ -18,12 +18,9 @@ export class User extends Identifiable {
   })
     tasks: Array<Ref<Task>>
 
-  /*
   @Prop()
     tenantId: string
-  */
 
-  /*
   @Prop({
     manyToOne: {
       localField: 'tenantId',
@@ -31,5 +28,4 @@ export class User extends Identifiable {
     }
   })
     tenant: Ref<Tenant>
-  */
 }
