@@ -38,4 +38,8 @@ export class UsersService {
   async remove (id: string): Promise<void> {
     await this._model.remove(id)
   }
+
+  async findOneByIndex (tenantId: string, name: string): Promise<User | null> {
+    return await this._model.findOne({ tenantId, name })
+  }
 }

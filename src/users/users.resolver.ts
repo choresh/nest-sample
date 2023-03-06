@@ -33,4 +33,9 @@ export class UsersResolver {
   async removeUser (@Args('id', { type: () => String }) id: string): Promise<void> {
     await this.usersService.remove(id)
   }
+
+  @Query(() => User, { name: 'userByIndex' })
+  async findOneByIndex (@Args('tenanId', { type: () => String }) tenantId: string, @Args('name', { type: () => String }) name: string): Promise<User | null> {
+    return await this.usersService.findOneByIndex(tenantId, name)
+  }
 }
