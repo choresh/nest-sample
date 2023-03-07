@@ -114,3 +114,36 @@ Add this line within `@Module({})` of the reource:
 ```
 imports: [TypegooseModule.forFeature([<type of the resource entity class>])],
 ```
+
+## Manage MongoDb migrations
+Run command in this structure within the project root folder:
+```bash
+$ npm run migrate [command] [options]
+```
+Usage:
+```bash
+$ npm run migrate [[create|up|down<migration-name>]|list|prune] [optional options]
+```
+Commands:
+```bash
+  list                     Lists all migrations and their current state.
+  create <migration-name>  Creates a new migration file.
+  up [migration-name]      Migrates all the migration files that have not yet
+                           been run in chronological order. Not including
+                           [migration-name] will run UP on all migrations that
+                           are in a DOWN state.
+  down <migration-name>    Rolls back all migrations down to given name (if down
+                           function was provided)
+  prune                    Allows you to delete extraneous migrations by
+                           removing extraneous local migration files/database
+                           migrations.
+```
+
+Options:
+```bash
+  --autosync              Automatically add any migrations on filesystem but not in db to db
+                          rather than asking interactively (use in scripts)
+  -h, --help              Show help
+ ```
+
+ Morte details about migration infra see here: [migrate-mongoose](https://www.npmjs.com/package/migrate-mongoose?activeTab=readme).
