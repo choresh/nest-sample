@@ -5,6 +5,9 @@ export class CreateUserInput {
   @Field()
     name: string
 
+  // @Field()
+  //   department: string
+
   @Field()
     tenantId: string
 }
