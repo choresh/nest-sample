@@ -1,5 +1,5 @@
 
 {
   "dbConnectionUri": "mongodb://localhost:27017/test",
-  "migrationsDir": "dist/migrations"
+  "migrationsDir": "./migrations"
 }
