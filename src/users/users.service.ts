@@ -43,7 +43,10 @@ export class UsersService {
     return await this._model.findOne({ tenantId, name })
   }
 
-  async findMostBusy (): Promise<User | null> {
+  async demonstrateComplexQuery (): Promise<User | null> {
+    const session = await this._model.db.startSession()
+    session.startTransaction()
+
     const result = await this._model.aggregate([
       {
         $lookup: {
@@ -80,5 +83,43 @@ export class UsersService {
     return (result.length === 1)
       ? result[0] as User
       : null
+  }
+
+  async demonstrateTransactionalBlock (): Promise<User[]> {
+    const session = await this._model.db.startSession()
+
+    await this._model.db
+      .transaction(async () => {
+        // await (new this._model({ name: 'user100', tenantId: '1' })).save({ session })
+        // await (new this._model({ name: 'user100', tenantId: '1' })).save({ session })
+        await this._model.create([{ name: 'user100', tenantId: '1' }], { session })
+        await this._model.create([{ name: 'user101', tenantId: '1' }], { session })
+        throw new Error('Oops!')
+      })
+      .catch((err) => {
+        console.error(err)
+      })
+
+    return await this._model.find().exec()
+  }
+
+  async demonstrateTransactionalFlow (): Promise<User[]> {
+    const session = await this._model.db.startSession()
+    session.startTransaction()
+
+    try {
+      await this._model.create([{ name: 'user100', tenantId: '1' }], { session })
+      await this._model.create([{ name: 'user101', tenantId: '1' }], { session })
+      const a = true
+      if (a) {
+        throw new Error('Oops!')
+      }
+      await session.commitTransaction()
+    } catch (err) {
+      console.error(err)
+      await session.abortTransaction()
+    }
+
+    return await this._model.find().exec()
   }
 }

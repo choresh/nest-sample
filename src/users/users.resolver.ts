@@ -39,8 +39,18 @@ export class UsersResolver {
     return await this.usersService.findOneByIndex(tenantId, name)
   }
 
-  @Query(() => User, { name: 'mostBusyUser' })
-  async findMostBusy (): Promise<User | null> {
-    return await this.usersService.findMostBusy()
+  @Query(() => User)
+  async demonstrateComplexQuery (): Promise<User | null> {
+    return await this.usersService.demonstrateComplexQuery()
+  }
+
+  @Query(() => [User])
+  async demonstrateTransactionalBlock (): Promise<User[]> {
+    return await this.usersService.demonstrateTransactionalBlock()
+  }
+
+  @Query(() => [User])
+  async demonstrateTransactionaFlow (): Promise<User[]> {
+    return await this.usersService.demonstrateTransactionalFlow()
   }
 }
