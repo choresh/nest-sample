@@ -38,4 +38,9 @@ export class UsersResolver {
   async findOneByIndex (@Args('tenanId', { type: () => String }) tenantId: string, @Args('name', { type: () => String }) name: string): Promise<User | null> {
     return await this.usersService.findOneByIndex(tenantId, name)
   }
+
+  @Query(() => User, { name: 'mostBusyUser' })
+  async findMostBusy (): Promise<User | null> {
+    return await this.usersService.findMostBusy()
+  }
 }
