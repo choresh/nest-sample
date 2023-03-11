@@ -6,3 +6,6 @@ dist/**/*
 
 # Coverage reports
 coverage
+
+# Files of local MongoDb
+data

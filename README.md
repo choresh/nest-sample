@@ -12,12 +12,23 @@ This app demonstrate combination of the folowing technologies:
 * [Compass](https://www.mongodb.com/products/compass).
 * In your VC Code IDE - install the [ESLint extention](https://marketplace.visualstudio.com/items?itemName=dbaeumer.vscode-eslint) (recommended)
 
-
 ## Installation
 Run this command within the project root folder:
 ``` bash
 $ npm install
 ```
+
+## Fix your local MongoDb installation (Convert a Standalone to a Replica Set)
+* Run those commands to kill the MongoDB process:
+  ```
+  % pgrep mongo
+  % kill <MongoDb Process ID>
+  ```
+* Run this command within the project root folder, to start MongoDb with the required configuration (do it in dedicated terminal, any close of the terminal will delete the DB data):
+  ```
+  run-rs npm module
+  ```
+* More info see [Convert a Standalone to a Replica Set](https://www.mongodb.com/docs/manual/tutorial/convert-standalone-to-replica-set).
 
 ## Build the app
 Run this command within the project root folder:

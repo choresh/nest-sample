@@ -86,18 +86,14 @@ export class UsersService {
   }
 
   async demonstrateTransactionalBlock (): Promise<User[]> {
-    const session = await this._model.db.startSession()
-
     await this._model.db
-      .transaction(async () => {
-        // await (new this._model({ name: 'user100', tenantId: '1' })).save({ session })
-        // await (new this._model({ name: 'user100', tenantId: '1' })).save({ session })
-        await this._model.create([{ name: 'user100', tenantId: '1' }], { session })
-        await this._model.create([{ name: 'user101', tenantId: '1' }], { session })
+      .transaction(async (session) => {
+        await this._model.create([{ name: 'user140', tenantId: '640cdbd78e8edb268cc8f0a9' }], { session })
+        await this._model.create([{ name: 'user141', tenantId: '640cdbd78e8edb268cc8f0a9' }], { session })
         throw new Error('Oops!')
       })
-      .catch((err) => {
-        console.error(err)
+      .catch(err => {
+        throw new Error(err)
       })
 
     return await this._model.find().exec()
@@ -108,18 +104,17 @@ export class UsersService {
     session.startTransaction()
 
     try {
-      await this._model.create([{ name: 'user100', tenantId: '1' }], { session })
-      await this._model.create([{ name: 'user101', tenantId: '1' }], { session })
-      const a = true
-      if (a) {
-        throw new Error('Oops!')
-      }
+      await this._model.create([{ name: 'user136', tenantId: '640cdbd78e8edb268cc8f0a9' }], { session })
+      await this._model.create([{ name: 'user137', tenantId: '640cdbd78e8edb268cc8f0a9' }], { session })
+      throw new Error('Oops!')
+      // eslint-disable-next-line no-unreachable
       await session.commitTransaction()
     } catch (err) {
-      console.error(err)
       await session.abortTransaction()
+      throw new Error(err)
     }
 
+    // eslint-disable-next-line no-unreachable
     return await this._model.find().exec()
   }
 }
