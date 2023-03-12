@@ -1,4 +1,5 @@
 import { Field, InputType } from '@nestjs/graphql'
+import { Gender } from '../entities/user.entity'
 
 @InputType()
 export class CreateUserInput {
@@ -11,8 +12,8 @@ export class CreateUserInput {
   @Field()
     tenantId: string
 
-  @Field()
-    gender: string
+  @Field(() => Gender)
+    gender: Gender
 
   @Field()
     age: number

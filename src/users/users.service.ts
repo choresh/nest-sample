@@ -3,7 +3,7 @@ import { plugin, ReturnModelType } from '@typegoose/typegoose'
 import { InjectModel } from 'nestjs-typegoose'
 import { type CreateUserInput } from './dto/create-user.input'
 import { type UpdateUserInput } from './dto/update-user.input'
-import { User } from './entities/user.entity'
+import { Gender, User } from './entities/user.entity'
 import * as autopopulate from 'mongoose-autopopulate'
 import { Field, ObjectType } from '@nestjs/graphql'
 
@@ -23,10 +23,10 @@ export class GenderInfo {
 @ObjectType()
 export class UsersInfo {
   @Field()
-    female: GenderInfo
+    females: GenderInfo
 
   @Field()
-    male: GenderInfo
+    males: GenderInfo
 }
 
 @plugin(autopopulate as any)
@@ -72,18 +72,18 @@ export class UsersService {
         $group: {
           _id: '$gender',
           count: { $sum: 1 },
-          avgAgeFemales: { $avg: { $cond: [{ $eq: ['$gender', 'female'] }, '$age', null] } },
-          avgAgeMales: { $avg: { $cond: [{ $eq: ['$gender', 'male'] }, '$age', null] } }
+          avgAgeFemales: { $avg: { $cond: [{ $eq: ['$gender', Gender.female] }, '$age', null] } },
+          avgAgeMales: { $avg: { $cond: [{ $eq: ['$gender', Gender.male] }, '$age', null] } }
         }
       }
     ])
 
     const usersInfo: UsersInfo = {
-      female: {
+      females: {
         count: result[0].count,
         avgAge: result[0].avgAgeFemales
       },
-      male: {
+      males: {
         count: result[1].count,
         avgAge: result[1].avgAgeMales
       }
@@ -136,8 +136,8 @@ export class UsersService {
   async demonstrateTransactionBlock (): Promise<User[]> {
     await this._model.db
       .transaction(async (session) => {
-        await this._model.create([{ name: 'user140', tenantId: '640cdbd78e8edb268cc8f0a9' }], { session })
-        await this._model.create([{ name: 'user141', tenantId: '640cdbd78e8edb268cc8f0a9' }], { session })
+        await this._model.create([{ name: 'user140', tenantId: '640cdbd78e8edb268cc8f0a9', gender: Gender.male, age: 32 }], { session })
+        await this._model.create([{ name: 'user141', tenantId: '640cdbd78e8edb268cc8f0a9', gender: Gender.female, age: 43 }], { session })
         throw new Error('Oops!')
       })
       .catch(err => {
@@ -152,8 +152,8 @@ export class UsersService {
     session.startTransaction()
 
     try {
-      await this._model.create([{ name: 'user136', tenantId: '640cdbd78e8edb268cc8f0a9' }], { session })
-      await this._model.create([{ name: 'user137', tenantId: '640cdbd78e8edb268cc8f0a9' }], { session })
+      await this._model.create([{ name: 'user136', tenantId: '640cdbd78e8edb268cc8f0a9', gender: Gender.male, age: 32 }], { session })
+      await this._model.create([{ name: 'user137', tenantId: '640cdbd78e8edb268cc8f0a9', gender: Gender.female, age: 43 }], { session })
       throw new Error('Oops!')
       // eslint-disable-next-line no-unreachable
       await session.commitTransaction()
@@ -174,7 +174,7 @@ export class UsersService {
           console.log(`Transaction #${i} started`)
           const length1 = (await this._model.find({ session }).exec()).length
           console.log(`Transaction #${i}, length: ${length1}`)
-          await this._model.create([{ name: `user'${i}`, tenantId: '640cdbd78e8edb268cc8f0a9' }], { session })
+          await this._model.create([{ name: `user'${i}`, tenantId: '640cdbd78e8edb268cc8f0a9', gender: Gender.female, age: 43 }], { session })
           console.log(`Transaction #${i}, creation done`)
           await sleep(10000)
           const length2 = (await this._model.find({ session }).exec()).length
