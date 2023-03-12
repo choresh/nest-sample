@@ -7,8 +7,8 @@ import { Tenant } from './../../tenants/entities/tenant.entity'
 import { Field, registerEnumType } from '@nestjs/graphql'
 
 export enum Gender {
-  female,
-  male
+  female = 'female',
+  male = 'male'
 }
 registerEnumType(Gender, {
   name: 'Gender'
@@ -43,7 +43,7 @@ export class User extends Identifiable {
     tenant: Ref<Tenant>
 
   @Field(() => Gender)
-  @prop(() => Gender)
+  @prop({ enum: Gender })
     gender: Gender
 
   @Prop()
