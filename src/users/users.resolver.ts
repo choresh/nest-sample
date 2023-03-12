@@ -1,5 +1,5 @@
 import { Resolver, Query, Mutation, Args } from '@nestjs/graphql'
-import { UsersService } from './users.service'
+import { UsersInfo, UsersService } from './users.service'
 import { User } from './entities/user.entity'
 import { CreateUserInput } from './dto/create-user.input'
 import { UpdateUserInput } from './dto/update-user.input'
@@ -39,8 +39,13 @@ export class UsersResolver {
     return await this.usersService.findOneByIndex(tenantId, name)
   }
 
-  @Query(() => User)
-  async demonstrateComplexQuery (): Promise<User | null> {
+  // @Query(() => User)
+  // async demonstrateComplexQuery (): Promise<User | null> {
+  //   return await this.usersService.demonstrateComplexQuery()
+  // }
+
+  @Query(() => UsersInfo)
+  async demonstrateComplexQuery (): Promise<UsersInfo> {
     return await this.usersService.demonstrateComplexQuery()
   }
 

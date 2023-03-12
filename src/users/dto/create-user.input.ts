@@ -10,4 +10,10 @@ export class CreateUserInput {
 
   @Field()
     tenantId: string
+
+  @Field()
+    gender: string
+
+  @Field()
+    age: number
 }

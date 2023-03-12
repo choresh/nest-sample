@@ -5,9 +5,28 @@ import { type CreateUserInput } from './dto/create-user.input'
 import { type UpdateUserInput } from './dto/update-user.input'
 import { User } from './entities/user.entity'
 import * as autopopulate from 'mongoose-autopopulate'
+import { Field, ObjectType } from '@nestjs/graphql'
 
 async function sleep (ms: number): Promise<void> {
   await new Promise(resolve => setTimeout(resolve, ms))
+}
+
+@ObjectType()
+export class GenderInfo {
+  @Field()
+    count: number
+
+  @Field()
+    avgAge: number
+}
+
+@ObjectType()
+export class UsersInfo {
+  @Field()
+    female: GenderInfo
+
+  @Field()
+    male: GenderInfo
 }
 
 @plugin(autopopulate as any)
@@ -47,47 +66,72 @@ export class UsersService {
     return await this._model.findOne({ tenantId, name })
   }
 
-  async demonstrateComplexQuery (): Promise<User | null> {
-    const session = await this._model.db.startSession()
-    session.startTransaction()
-
+  async demonstrateComplexQuery (): Promise<UsersInfo> {
     const result = await this._model.aggregate([
       {
-        $lookup: {
-          from: 'tasks',
-          localField: '_id',
-          foreignField: 'userId',
-          as: 'tasks'
+        $group: {
+          _id: '$gender',
+          count: { $sum: 1 },
+          avgAgeFemales: { $avg: { $cond: [{ $eq: ['$gender', 'female'] }, '$age', null] } },
+          avgAgeMales: { $avg: { $cond: [{ $eq: ['$gender', 'male'] }, '$age', null] } }
         }
+      }
+    ])
+
+    const usersInfo: UsersInfo = {
+      female: {
+        count: result[0].count,
+        avgAge: result[0].avgAgeFemales
       },
-      {
-        $addFields: {
-          numTasks: { $size: '$tasks' }
-        }
-      }/*,
-      {
-        $sort: {
-          numTasks: -1
-        }
-      },
-      {
-        $limit: 100
-      },
-      {
-        $project: {
-          _id: 1,
-          name: 1,
-          numTasks: 1
-        }
-      } */
-    ]).exec()
-    if (result.length > 1) {
-      throw new Error('Internal error')
+      male: {
+        count: result[1].count,
+        avgAge: result[1].avgAgeMales
+      }
     }
-    return (result.length === 1)
-      ? result[0] as User
-      : null
+
+    return usersInfo
   }
+
+  // async demonstrateComplexQuery (): Promise<User | null> {
+  //   const result = await this._model
+  //     .aggregate([
+  //       {
+  //         $lookup: {
+  //           from: 'tasks',
+  //           localField: '_id',
+  //           foreignField: 'userId',
+  //           as: 'tasks'
+  //         }
+  //       }/*,
+  //       {
+  //         $addFields: {
+  //           numTasks: { $size: '$tasks' }
+  //         }
+  //       }/*,
+  //       {
+  //         $sort: {
+  //           numTasks: -1
+  //         }
+  //       },
+  //       {
+  //         $limit: 100
+  //       },
+  //       {
+  //         $project: {
+  //           _id: 1,
+  //           name: 1,
+  //           numTasks: 1
+  //         }
+  //       } */
+  //     ]).exec()
+
+  //   if (result.length > 1) {
+  //     throw new Error('Internal error')
+  //   }
+  //   return (result.length === 1)
+  //     ? result[0] as User
+  //     : null
+  // }
 
   async demonstrateTransactionBlock (): Promise<User[]> {
     await this._model.db
