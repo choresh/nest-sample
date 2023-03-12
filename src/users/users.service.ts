@@ -6,6 +6,10 @@ import { type UpdateUserInput } from './dto/update-user.input'
 import { User } from './entities/user.entity'
 import * as autopopulate from 'mongoose-autopopulate'
 
+async function sleep (ms: number): Promise<void> {
+  await new Promise(resolve => setTimeout(resolve, ms))
+}
+
 @plugin(autopopulate as any)
 @Injectable()
 export class UsersService {
@@ -85,7 +89,7 @@ export class UsersService {
       : null
   }
 
-  async demonstrateTransactionalBlock (): Promise<User[]> {
+  async demonstrateTransactionBlock (): Promise<User[]> {
     await this._model.db
       .transaction(async (session) => {
         await this._model.create([{ name: 'user140', tenantId: '640cdbd78e8edb268cc8f0a9' }], { session })
@@ -99,7 +103,7 @@ export class UsersService {
     return await this._model.find().exec()
   }
 
-  async demonstrateTransactionalFlow (): Promise<User[]> {
+  async demonstrateTransactionFlow (): Promise<User[]> {
     const session = await this._model.db.startSession()
     session.startTransaction()
 
@@ -115,6 +119,28 @@ export class UsersService {
     }
 
     // eslint-disable-next-line no-unreachable
+    return await this._model.find().exec()
+  }
+
+  async demonstrateTransactionLock (): Promise<User[]> {
+    const promises: Array<Promise<void>> = []
+    for (let i = 0; i < 5; i++) {
+      const currPromise = this._model.db
+        .transaction(async (session) => {
+          console.log(`Transaction #${i} started`)
+          const length1 = (await this._model.find({ session }).exec()).length
+          console.log(`Transaction #${i}, length: ${length1}`)
+          await this._model.create([{ name: `user'${i}`, tenantId: '640cdbd78e8edb268cc8f0a9' }], { session })
+          console.log(`Transaction #${i}, creation done`)
+          await sleep(10000)
+          const length2 = (await this._model.find({ session }).exec()).length
+          console.log(`Transaction #${i} ended, length: ${length2}`)
+        }, { readConcern: 'majority', readPreference: 'primary', writeConcern: { w: 'majority' } })
+      promises.push(currPromise)
+    }
+    await Promise.all(promises)
+    const length3 = (await this._model.find().exec()).length
+    console.log(`All transactions ended, length: ${length3}`)
     return await this._model.find().exec()
   }
 }

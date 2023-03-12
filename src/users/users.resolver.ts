@@ -45,12 +45,17 @@ export class UsersResolver {
   }
 
   @Query(() => [User])
-  async demonstrateTransactionalBlock (): Promise<User[]> {
-    return await this.usersService.demonstrateTransactionalBlock()
+  async demonstrateTransactionBlock (): Promise<User[]> {
+    return await this.usersService.demonstrateTransactionBlock()
   }
 
   @Query(() => [User])
-  async demonstrateTransactionaFlow (): Promise<User[]> {
-    return await this.usersService.demonstrateTransactionalFlow()
+  async demonstrateTransactionFlow (): Promise<User[]> {
+    return await this.usersService.demonstrateTransactionFlow()
+  }
+
+  @Query(() => [User])
+  async demonstrateTransactionLock (): Promise<User[]> {
+    return await this.usersService.demonstrateTransactionLock()
   }
 }
