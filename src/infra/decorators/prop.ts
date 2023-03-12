@@ -7,7 +7,7 @@ const PRIMARY_KEYS_NAME = '_id'
 const PRIMARY_KEYS_TYPE = ID
 
 export interface Relation {
-  ref: () => Type<any>
+  refType: () => Type<any>
 }
 
 export interface OneToMany extends Relation {
@@ -23,6 +23,7 @@ export interface PropOptions {
   primaryKey?: boolean
   oneToMany?: OneToMany
   manyToOne?: ManyToOne
+  enumType?: () => any
 }
 
 /**
@@ -34,31 +35,37 @@ export function Prop (options: PropOptions = {}) {
   return function (target: any, key: string) {
     const reflectedType = Reflect.getMetadata('design:type', target, key)
 
-    const ref = options.manyToOne?.ref ?? options.oneToMany?.ref
-    if ((ref !== undefined) && (options.primaryKey === true)) {
-      throw new Error(`Options 'ref' and 'primaryKey' cannot defined togather, at '@Prop()' decorator, above property '${target.constructor.name as string}.${key}'`)
+    if (((options.manyToOne !== undefined) || (options.oneToMany !== undefined) || (options.enumType !== undefined)) && (options.primaryKey === true)) {
+      throw new Error(`Option 'primaryKey' cannot defined togather with 'manyToOne'/'oneToMany'/'enumType' options, at '@Prop()' decorator, above property '${target.constructor.name as string}.${key}'`)
     }
 
-    const graphQlType: ReturnTypeFunc = (ref !== undefined)
+    if (((options.manyToOne !== undefined) || (options.oneToMany !== undefined)) && (options.enumType !== undefined)) {
+      throw new Error(`Option 'enumType' cannot defined togather with 'manyToOne'/'oneToMany' options, at '@Prop()' decorator, above property '${target.constructor.name as string}.${key}'`)
+    }
+
+    if ((options.oneToMany !== undefined) && (options.manyToOne !== undefined)) {
+      throw new Error(`Options 'oneToMany' and 'manyToOne' cannot defined togather, at '@Prop()' decorator, above property '${target.constructor.name as string}.${key}'`)
+    }
+
+    const typeFunc = options.manyToOne?.refType ?? options.oneToMany?.refType ?? options.enumType
+
+    const graphQlTypeFunc: ReturnTypeFunc = (typeFunc !== undefined)
       ? (reflectedType.name === 'Array')
-          ? () => [ref()]
-          : ref
+          ? () => [typeFunc()]
+          : typeFunc
       : (options.primaryKey === true)
           ? () => PRIMARY_KEYS_TYPE
           : () => reflectedType
 
-    Field(graphQlType, { nullable: options.nullable })(target, key) // Apply the graphql @Field() decorator to the property.
+    Field(graphQlTypeFunc, { nullable: options.nullable })(target, key) // Apply the graphql @Field() decorator to the property.
 
     if (options.primaryKey !== true) {
       const typegooseOptions: TypegooseOptions = {
         required: (options.nullable !== true)
       }
       if ((options.oneToMany !== undefined) || (options.manyToOne !== undefined)) {
-        if (ref === undefined) {
+        if (typeFunc === undefined) {
           throw new Error(`Option 'ref' is required, at '@Prop()' decorator, above property '${target.constructor.name as string}.${key}'`)
-        }
-        if ((options.oneToMany !== undefined) && (options.manyToOne !== undefined)) {
-          throw new Error(`Options 'oneToMany' and 'manyToOne' cannot defined togather, at '@Prop()' decorator, above property '${target.constructor.name as string}.${key}'`)
         }
         if (options.oneToMany !== undefined) {
           typegooseOptions.foreignField = options.oneToMany.foreignField
@@ -71,7 +78,7 @@ export function Prop (options: PropOptions = {}) {
           typegooseOptions.justOne = true
           typegooseOptions.autopopulate = { maxDepth: 1 }
         }
-        typegooseOptions.ref = ref
+        typegooseOptions.ref = typeFunc
         typegooseOptions.type = reflectedType
       }
       TypegooseProp(typegooseOptions)(target, key) // Apply the typegoose @Prop() decorator to the property.

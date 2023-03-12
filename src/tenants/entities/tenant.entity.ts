@@ -12,7 +12,7 @@ export class Tenant extends Identifiable {
   @Prop({
     oneToMany: {
       foreignField: 'tenantId',
-      ref: () => User
+      refType: () => User
     }
   })
     users: Array<Ref<User>>

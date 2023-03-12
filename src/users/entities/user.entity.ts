@@ -1,10 +1,10 @@
-import { Index, prop, type Ref } from '@typegoose/typegoose'
+import { Index, type Ref } from '@typegoose/typegoose'
 import { Task } from '../../tasks/entities/task.entity'
 import { Entity } from '../../infra/decorators/entity'
 import { Prop } from '../../infra/decorators/prop'
 import { Identifiable } from '../../infra/bases/identifiable'
 import { Tenant } from './../../tenants/entities/tenant.entity'
-import { Field, registerEnumType } from '@nestjs/graphql'
+import { registerEnumType } from '@nestjs/graphql'
 
 export enum Gender {
   female = 'female',
@@ -26,7 +26,7 @@ export class User extends Identifiable {
   @Prop({
     oneToMany: {
       foreignField: 'userId',
-      ref: () => Task
+      refType: () => Task
     }
   })
     tasks: Array<Ref<Task>>
@@ -37,13 +37,14 @@ export class User extends Identifiable {
   @Prop({
     manyToOne: {
       localField: 'tenantId',
-      ref: () => Tenant
+      refType: () => Tenant
     }
   })
     tenant: Ref<Tenant>
 
-  @Field(() => Gender)
-  @prop({ enum: Gender })
+  @Prop({
+    enumType: () => Gender
+  })
     gender: Gender
 
   @Prop()
