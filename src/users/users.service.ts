@@ -23,10 +23,10 @@ export class GenderInfo {
 @ObjectType()
 export class UsersInfo {
   @Field()
-    females: GenderInfo
+    females?: GenderInfo
 
   @Field()
-    males: GenderInfo
+    males?: GenderInfo
 }
 
 @plugin(autopopulate as any)
@@ -72,22 +72,33 @@ export class UsersService {
         $group: {
           _id: '$gender',
           count: { $sum: 1 },
-          avgAgeFemales: { $avg: { $cond: [{ $eq: ['$gender', Gender.female] }, '$age', null] } },
-          avgAgeMales: { $avg: { $cond: [{ $eq: ['$gender', Gender.male] }, '$age', null] } }
+          avgAgeFemales: { $avg: { $cond: [{ $eq: ['$gender', 'female'] }, '$age', null] } },
+          avgAgeMales: { $avg: { $cond: [{ $eq: ['$gender', 'male'] }, '$age', null] } }
         }
       }
     ])
 
     const usersInfo: UsersInfo = {
-      females: {
-        count: result[0].count,
-        avgAge: result[0].avgAgeFemales
-      },
-      males: {
-        count: result[1].count,
-        avgAge: result[1].avgAgeMales
-      }
     }
+
+    result.forEach(currResult => {
+      switch (currResult._id) {
+        case 'female':
+          usersInfo.females = {
+            count: currResult.count,
+            avgAge: currResult.avgAgeFemales
+          }
+          break
+        case 'male':
+          usersInfo.males = {
+            count: currResult.count,
+            avgAge: currResult.avgAgeMales
+          }
+          break
+        default:
+          throw new Error('Unexpected case')
+      }
+    })
 
     return usersInfo
   }
