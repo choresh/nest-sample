@@ -18,7 +18,7 @@ Run this command within the project root folder:
 $ npm install
 ```
 
-## Fix your local MongoDb installation (Convert a Standalone to a Replica Set)
+## Fix your local MongoDb installation (Convert a Standalone to a Replica Set), optional, required only for tests with locks
 * Run those commands to kill the MongoDB process:
   ```
   % pgrep mongo
@@ -159,7 +159,7 @@ Options:
 
 Morte details about migration infra see here: [migrate-mongoose](https://www.npmjs.com/package/migrate-mongoose?activeTab=readme).
 
-Sample of (modified) migtration file:
+Sample of (modified) migtration file (in this sample - change property name from 'department' to 'division' at 'up' migration, and reverse it at 'down' migration):
 ``` javascript
 const mongoose = require('mongoose')
 const typegoose = require('@typegoose/typegoose')
@@ -188,3 +188,9 @@ async function down () {
 
 module.exports = { up, down }
  ``` 
+
+ ## Some more issue which demostrated in this APP:
+* Creation of 'index' (unique + compound in this sample): see decorator '@Index()' [in this file](./src/users/entities/user.entity.ts).
+* Sample of free query, i.e query that have particular logic (not relay on automatic mapping of 'typegoose'), and also return particular data structure: see method 'demonstrateComplexQuery()' [in this file](./src/users/users.service.ts).
+* Usage of 'transaction', include its locking capabilities: see methods 'demonstrateTransactionBlock()', 'demonstrateTransactionFlow()' and 'demonstrateTransactionLock()' [in this file](./src/users/users.service.ts).
+ * Usage of 'enum': see all occurrence of 'Gender'.
