@@ -190,7 +190,7 @@ export class UsersService {
           await sleep(10000)
           const length2 = (await this._model.find({ session }).exec()).length
           console.log(`Transaction #${i} ended, length: ${length2}`)
-        }, { readConcern: 'majority', readPreference: 'primary', writeConcern: { w: 'majority' } })
+        }, { readConcern: 'majority', readPreference: 'primary', writeConcern: { w: 'majority' } }) // Transaction options sample, they allow us to define required balance between 'consistency' and 'performance'.
       promises.push(currPromise)
     }
     await Promise.all(promises)
