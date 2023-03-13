@@ -189,7 +189,7 @@ async function down () {
 module.exports = { up, down }
  ``` 
 
- ## Some more issue which demostrated in this APP:
+ ## Some more issue which demostrated in this APP
 * Creation of 'index' (unique + compound in this sample): see decorator '@Index()' [in this file](./src/users/entities/user.entity.ts).
 * Sample of free query, i.e query that have particular logic (not relay on automatic mapping of 'typegoose'), and also return particular data structure: see method 'demonstrateComplexQuery()' [in this file](./src/users/users.service.ts).
 * Usage of 'transaction', include its locking capabilities: see methods 'demonstrateTransactionBlock()', 'demonstrateTransactionFlow()' and 'demonstrateTransactionLock()' [in this file](./src/users/users.service.ts).
